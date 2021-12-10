@@ -1,5 +1,6 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.json.JSONArray;
@@ -70,4 +71,13 @@ public class Simulateur {
 		}
 
 	}
+	
+	
+	public void Simuler() {
+		HashMap<Acteur,String> MapResult = this.scrutin.simuler();
+		for (Acteur actor : MapResult.keySet()) {
+		    System.out.println(actor.getNom() + " : " + MapResult.get(actor) + "");
+		}
+	}
+	
 }

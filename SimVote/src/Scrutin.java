@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Vector;
 
 public abstract class Scrutin {
@@ -10,5 +11,5 @@ public abstract class Scrutin {
 		this.vecElecteurs = vecElecteurs;
 	}
 
-	public abstract void simuler();
+	public abstract HashMap<Acteur,String> simuler();
 }

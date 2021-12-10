@@ -1,25 +1,54 @@
 {
     "Axes" : [
         "Ecologie",
-        "Capitalisme"
+        "Capitalisme",
+        "PouvoirAchat",
+        "Immigration"
     ],
     "Candidats" : [
         {
-            "id" : "FFillon",
-            "Ecologie" : 0.4,
-            "Capitalisme" : 0.9
+            "id" : "Fillon",
+            "Ecologie" : 0.1,
+            "Capitalisme" : 1,
+            "PouvoirAchat" : 0.3,
+            "Immigration" : 0.6
         },
         {
-            "id" : "MMacron",
-            "Ecologie" : 0.4,
-            "Capitalisme" : 1
+            "id" : "Zemmour",
+            "Ecologie" : 0,
+            "Capitalisme" : 0.8,
+            "PouvoirAchat" : 0.5,
+            "Immigration" : 1
+        },
+        {
+            "id" : "Macron",
+            "Ecologie" : 0.2,
+            "Capitalisme" : 0.9,
+            "PouvoirAchat" : 0.4,
+            "Immigration" : 0.2
         }
     ],
     "Electeurs":[
         {
             "id" : "didier",
-            "Ecologie" : 0.4,
-            "Capitalisme" : 1
+            "Ecologie" : 0.1,
+            "Capitalisme" : 0.5,
+            "PouvoirAchat" : 0.9,
+            "Immigration" : 0.8
+        },
+        {
+            "id" : "Fleure",
+            "Ecologie" : 1,
+            "Capitalisme" : 0,
+            "PouvoirAchat" : 0.5,
+            "Immigration" : 0
+        },
+        {
+            "id" : "jean",
+            "Ecologie" : 0.7,
+            "Capitalisme" : 0.2,
+            "PouvoirAchat" : 0.4,
+            "Immigration" : 0.2
         }
     ]
 

@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Vector;
 
 public class ScrutinMajoritaire2Tours extends Scrutin {
@@ -7,9 +8,8 @@ public class ScrutinMajoritaire2Tours extends Scrutin {
 	}
 
 	@Override
-	public void simuler() {
-		// TODO Auto-generated method stub
-
+	public HashMap<Acteur,String> simuler() {
+		return new HashMap<Acteur,String>();
 	}
 
 }

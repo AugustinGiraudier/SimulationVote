@@ -27,7 +27,7 @@ public class SimVote {
 		//System.out.println(A);
 		//System.out.println(B);
 		
-		Simulateur sc = new Simulateur(ScrutinType.MAJORITAIRE_2_TOURS, "Config.json","Acteurs.json");
-		
+		Simulateur sc = new Simulateur(ScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
+		sc.Simuler();
 	}
 }

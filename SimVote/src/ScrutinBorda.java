@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Vector;
 
 public class ScrutinBorda extends Scrutin {
@@ -7,9 +8,8 @@ public class ScrutinBorda extends Scrutin {
 	}
 
 	@Override
-	public void simuler() {
-		// TODO Auto-generated method stub
-
+	public HashMap<Acteur,String> simuler() {
+		return new HashMap<Acteur,String>();
 	}
 
 }
