@@ -1,0 +1,26 @@
+{
+    "Axes" : [
+        "Ecologie",
+        "Capitalisme"
+    ],
+    "Candidats" : [
+        {
+            "id" : "FFillon",
+            "Ecologie" : 0.4,
+            "Capitalisme" : 0.9
+        },
+        {
+            "id" : "MMacron",
+            "Ecologie" : 0.4,
+            "Capitalisme" : 1
+        }
+    ],
+    "Electeurs":[
+        {
+            "id" : "didier",
+            "Ecologie" : 0.4,
+            "Capitalisme" : 1
+        }
+    ]
+
+}

@@ -1,0 +1,5 @@
+{
+    "Seuil_Proximite_Opinion" : 0.08,
+    "Seuil_Distance_Apres_Interaction" : 0.1,
+    "Seuil_Ecart_A_La_Moyenne" : 0.5
+}
