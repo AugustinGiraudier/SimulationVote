@@ -1,6 +1,13 @@
-import java.util.Vector;
-
+/**
+ * Classe principale
+ * @author Augustin Giraudier et Arthur Secher Cabot
+ */
 public class SimVote {
+	/**
+	 * Main
+	 * @param args : arguments
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		
 //		// Acteur A
@@ -27,7 +34,7 @@ public class SimVote {
 		//System.out.println(A);
 		//System.out.println(B);
 		
-		Simulateur sc = new Simulateur(ScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
+		Simulateur sc = new Simulateur(AlgoProximite.SOMME_DIFFERENCES, ScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
 		sc.Simuler();
 	}
 }

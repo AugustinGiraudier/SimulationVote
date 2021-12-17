@@ -1,11 +1,17 @@
+/**
+ * Classe gérant un axe d'opinion
+ * @author Augustin Giraudier et Arthur Secher Cabot
+ */
 public class Axe implements Comparable<Axe> {
-	
-	//public static double SeuilProximiteOpinion = -1;
 	
 	private String nom;
 	private double valeur; 
 	
-	
+	/**
+	 * @param _nom : nom de l'axe
+	 * @param _valeur : valeur de l'axe
+	 * @throws Exception
+	 */
 	public Axe(String _nom, double _valeur) throws Exception {
 		//if(Axe.SeuilProximiteOpinion == -1) {
 		//	throw new Exception("Please Set The static variable Axe.SeuilProximiteOpinion before instantiate it.");
@@ -17,19 +23,33 @@ public class Axe implements Comparable<Axe> {
 		this.valeur = _valeur;
 	};
 	
-	private double getValeur() {return valeur;}
+	/**
+	 * @return la valeur associée à l'axe
+	 */
+	public double getValeur() {return valeur;}
+	/**
+	 * @return le nom associé à l'axe
+	 */
 	private String getNom() {return nom;}
+	
+	/**
+	 * @param a : second axe
+	 * @return la distance entre deux axes (valeur absolue de la différence)
+	 */
 	public double getDistance(Axe a) {
 		return Math.abs(this.valeur - a.getValeur());
 	}
-	
-	
-//	public boolean estProche(Axe a) {
-//		return getDistance(a) < Axe.SeuilProximiteOpinion;
-//	}
+	/**
+	 * @param a : second axe
+	 * @return 'true' si les deux axes ont le même nom
+	 */
 	public boolean memeNom(Axe a) {
 		return nom == a.getNom();
 	}
+	/**
+	 * @param a : second axe
+	 * @return moyenne des valeurs des deux axes
+	 */
 	public double moyenne(Axe a) {
 		return (this.getValeur() + a.getValeur()) / 2;
 	}

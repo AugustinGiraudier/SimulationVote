@@ -1,5 +1,9 @@
 import java.util.Vector;
 
+/**
+ * classe représentant un acteur (candidat ou electeur)
+ * @author Augustin Giraudier et Arthur Secher Cabot
+ */
 public class Acteur {
 	
 	public static double SeuilProximiteActeurs = -1;
@@ -8,8 +12,16 @@ public class Acteur {
 	private String nom;
 	protected Vector<Axe> vecAxes;
 	
+	/**
+	 * @return Le nom de l'acteur
+	 */
 	public String getNom() {return nom;}
 	
+	/**
+	 * @param _nom : nom de l'acteur
+	 * @param _vecAxes : vecteur des axes d'opinion de l'acteur
+	 * @throws Exception
+	 */
 	public Acteur(String _nom, Vector<Axe> _vecAxes) throws Exception {
 		if(Acteur.SeuilProximiteActeurs == -1) {
 			throw new Exception("Please Set The static variable Acteur.SeuilProximiteActeurs before instantiate it.");
@@ -21,11 +33,62 @@ public class Acteur {
 		this.vecAxes = _vecAxes;
 	}
 	
-	public double OpinionProche(Acteur a) {
-		return moyenneDiffOk(this.vecAxes, a.vecAxes);
+	/**
+	 * Permet de recuperer la distance d'opinion entre deux acteurs
+	 * @param a : second acteur
+	 * @param algo : algorithme de proximité d'opinion à utiliser
+	 * @return une valeur représentant la distance d'opinion
+	 * @throws Exception
+	 */
+	public double getDistance(Acteur a, AlgoProximite algo) throws Exception {
+		switch(algo) {
+		case DISTANCE_VECTEUR:
+			return vectorDistance(a);
+		case SOMME_DIFFERENCES:
+			return moyenneDiff(this.vecAxes, a.vecAxes);
+		case SOMME_DIFFERENCES_AXES_PRINCIPAUX:
+			return moyenneDiffAxesPrincipaux(a);
+		default:
+			throw new Exception("Erreur : algorithme de proximité inconnu...");
+		}
 	}
 	
-	public double affinite(Acteur c) {
+	/**
+	 * @return le vecteur de double contenant les valeurs de tous les axes
+	 */
+	private double[] getVector() {
+		double[] vec = new double[this.vecAxes.size()];
+		for(int i_axe = 0; i_axe < this.vecAxes.size(); i_axe++) {
+			vec[i_axe] = this.vecAxes.get(i_axe).getValeur();
+		}
+		return vec;
+	}
+			
+	/**
+	 * @param a : second acteur
+	 * @return la distance entre les vecteurs d'opinion des deux acteurs
+	 */
+	private double vectorDistance(Acteur a) {
+		double[] vec1 = this.getVector();
+		double[] vec2 = a.getVector();
+		double sum = 0;
+		
+		//TODO verifier qu'ils ont le meme nbr d'axe
+		
+		for(int i_axe = 0; i_axe < this.vecAxes.size(); i_axe++) {
+			sum += Math.pow(vec2[i_axe] - vec1[i_axe], 2);
+		}
+		
+		return Math.sqrt(sum);
+	}
+	
+	/**
+	 * Récupère les axes principaux d'opinion du votant et fait la myenne des différences 
+	 * avec le second acteur sur ces axes.
+	 * @param a : second acteur
+	 * @return la moyenne des différences entre les axes principaux d'opinion
+	 */
+	private double moyenneDiffAxesPrincipaux(Acteur a) {
 		
 		Vector<Axe> vecA = new Vector<Axe>();
 		Vector<Axe> vecB = new Vector<Axe>();
@@ -39,7 +102,7 @@ public class Acteur {
 		for(int i_axe = 0; i_axe < this.vecAxes.size(); i_axe++) {
 			for(int i_pos = 0; i_pos < nbrAxesPrincipaux; i_pos++) {
 				// Si la valeur est plus grande que la plus grande stockée
-				if(this.vecAxes.get(i_axe).compareTo(c.vecAxes.get(positionsMax[i_pos])) == -1) {
+				if(this.vecAxes.get(i_axe).compareTo(a.vecAxes.get(positionsMax[i_pos])) == -1) {
 					for(int i_decal = nbrAxesPrincipaux-1; i_decal > i_pos; i_decal--) {
 						positionsMax[i_decal] = positionsMax[i_decal-1];
 					}
@@ -53,19 +116,24 @@ public class Acteur {
 		
 		// On recupere les memes axes ches le candidat :
 		for(Axe axe : vecA) {
-			for(Axe axeB : c.vecAxes) {
+			for(Axe axeB : a.vecAxes) {
 				if(axe.memeNom(axeB)) {
 					vecB.add(axeB);
 				}
 			}
 		}
 		
-		return moyenneDiffOk(vecA, vecB);
+		return moyenneDiff(vecA, vecB);
 	}
 	
-	private double moyenneDiffOk(Vector<Axe> vecA, Vector<Axe> vecB) {
+	/**
+	 * @param vecA : premier vecteur
+	 * @param vecB : second vecteur
+	 * @return la moyenne des differences entre chaque terme des vecteurs
+	 */
+	private double moyenneDiff(Vector<Axe> vecA, Vector<Axe> vecB) {
 		Vector<Double> vecDiff = new Vector<Double>();
-		
+		//TODO verifier les dims des vecteurs
 		for(Axe axe1 : vecA) {
 			for(Axe axe2 : vecB) {
 				if(axe1.memeNom(axe2)) {

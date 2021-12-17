@@ -6,14 +6,23 @@ import java.util.Vector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ * Classe Permettant de simuler une éléction
+ * @author Augustin Giraudier et Arthur Secher Cabot
+ */
 public class Simulateur {
 	
 	private Vector<Acteur> vecCandidats;
 	private Vector<Acteur> vecElecteurs;
 	private Scrutin scrutin;
 	
-	
-	public Simulateur(ScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) {
+	/**
+	 * @param algo : algorithme de proximité à utiliser pour l'éléction
+	 * @param scrutin : type de scrutin à mettre en place
+	 * @param ConfigFilePath : chemin vers le fichier de configuration
+	 * @param ActorsFilePath : chemin vers le fichier des acteurs
+	 */
+	public Simulateur(AlgoProximite algo, ScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) {
 		
 		this.vecCandidats = new Vector<Acteur>();
 		this.vecElecteurs = new Vector<Acteur>();
@@ -54,25 +63,28 @@ public class Simulateur {
 		
 		switch(scrutin) {
 		case ALTERNATIF:
-			this.scrutin = new ScrutinAlternatif(this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new ScrutinAlternatif(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case APPROBATION:
-			this.scrutin = new ScrutinApprobation(this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new ScrutinApprobation(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case BORDA:
-			this.scrutin = new ScrutinBorda(this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new ScrutinBorda(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case MAJORITAIRE_1_TOUR:
-			this.scrutin = new ScrutinMajoritaire1Tour(this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new ScrutinMajoritaire1Tour(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case MAJORITAIRE_2_TOURS:
-			this.scrutin = new ScrutinMajoritaire2Tours(this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new ScrutinMajoritaire2Tours(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		}
 
 	}
 	
 	
+	/**
+	 * Lance le scrutin enregistré et affiche les résultats
+	 */
 	public void Simuler() {
 		HashMap<Acteur,String> MapResult = this.scrutin.simuler();
 		for (Acteur actor : MapResult.keySet()) {

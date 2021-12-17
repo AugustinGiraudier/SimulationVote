@@ -1,10 +1,19 @@
 import java.util.HashMap;
 import java.util.Vector;
 
+/**
+ * Classe permettant de simuler un scrutin majoritaire à 2 tours
+ * @author Augustin Giraudier et Arthur Secher Cabot
+ */
 public class ScrutinMajoritaire2Tours extends Scrutin {
 
-	public ScrutinMajoritaire2Tours(Vector<Acteur> vecCandidats, Vector<Acteur> vecElecteurs) {
-		super(vecCandidats, vecElecteurs);
+	/**
+	 * @param algo : algorithme de proximité à utiliser
+	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
+	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
+	 */
+	public ScrutinMajoritaire2Tours(AlgoProximite algo, Vector<Acteur> vecCandidats, Vector<Acteur> vecElecteurs) {
+		super(algo, vecCandidats, vecElecteurs);
 	}
 
 	@Override
