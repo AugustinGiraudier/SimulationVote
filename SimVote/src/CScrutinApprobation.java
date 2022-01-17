@@ -2,23 +2,23 @@ import java.util.HashMap;
 import java.util.Vector;
 
 /**
- * Classe permettant de simuler un scrutin Borda
+ * Classe permettant de simuler un scrutin par Approbation
  * @author Augustin Giraudier et Arthur Secher Cabot
  */
-public class ScrutinBorda extends Scrutin {
+public class CScrutinApprobation extends CScrutin{
 
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
 	 */
-	public ScrutinBorda(AlgoProximite algo, Vector<Acteur> vecCandidats, Vector<Acteur> vecElecteurs) {
+	public CScrutinApprobation(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecElecteurs) {
 		super(algo, vecCandidats, vecElecteurs);
 	}
 
 	@Override
-	public HashMap<Acteur,String> simuler() {
-		return new HashMap<Acteur,String>();
+	public HashMap<CActeur,String> simuler() {
+		return new HashMap<CActeur,String>();
 	}
 
 }

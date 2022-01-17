@@ -10,11 +10,11 @@ import org.json.JSONObject;
  * Classe Permettant de simuler une éléction
  * @author Augustin Giraudier et Arthur Secher Cabot
  */
-public class Simulateur {
+public class CSimulateur {
 	
-	private Vector<Acteur> vecCandidats;
-	private Vector<Acteur> vecElecteurs;
-	private Scrutin scrutin;
+	private Vector<CActeur> vecCandidats;
+	private Vector<CActeur> vecElecteurs;
+	private CScrutin scrutin;
 	
 	/**
 	 * @param algo : algorithme de proximité à utiliser pour l'éléction
@@ -22,18 +22,18 @@ public class Simulateur {
 	 * @param ConfigFilePath : chemin vers le fichier de configuration
 	 * @param ActorsFilePath : chemin vers le fichier des acteurs
 	 */
-	public Simulateur(AlgoProximite algo, ScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) {
+	public CSimulateur(EAlgoProximite algo, EScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) {
 		
-		this.vecCandidats = new Vector<Acteur>();
-		this.vecElecteurs = new Vector<Acteur>();
+		this.vecCandidats = new Vector<CActeur>();
+		this.vecElecteurs = new Vector<CActeur>();
 		
 		JSONObject ConfigObj;
 		JSONObject ActeursObj;
 		try {
 			
 			ConfigObj = new JSONObject(Files.readString(Paths.get(ConfigFilePath)));
-			Acteur.SeuilProximiteActeurs = ConfigObj.getDouble("Seuil_Proximite_Acteurs");
-			Acteur.nbrAxesPrincipaux = ConfigObj.getInt("Nbr_Axes_Principaux");
+			CActeur.SeuilProximiteActeurs = ConfigObj.getDouble("Seuil_Proximite_Acteurs");
+			CActeur.nbrAxesPrincipaux = ConfigObj.getInt("Nbr_Axes_Principaux");
 		
 			
 			ActeursObj = new JSONObject(Files.readString(Paths.get(ActorsFilePath)));
@@ -46,14 +46,14 @@ public class Simulateur {
 				JSONArray ActeurArr = ActeursObj.getJSONArray(strKey);
 				for(int i_candidat=0; i_candidat < ActeurArr.length(); i_candidat++) {
 					JSONObject CandidatObj = ActeurArr.getJSONObject(i_candidat);
-					Vector<Axe> vecAxes = new Vector<Axe>();
+					Vector<CAxe> vecAxes = new Vector<CAxe>();
 					for(int i_axe = 0; i_axe < AxesArr.length(); i_axe++) {
-						vecAxes.add(new Axe(AxesArr.getString(i_axe), CandidatObj.getDouble(AxesArr.getString(i_axe))));
+						vecAxes.add(new CAxe(AxesArr.getString(i_axe), CandidatObj.getDouble(AxesArr.getString(i_axe))));
 					}
 					if(strKey == "Candidats")
-						vecCandidats.add(new Acteur(CandidatObj.getString("id"),vecAxes));
+						vecCandidats.add(new CActeur(CandidatObj.getString("id"),vecAxes));
 					else
-						vecElecteurs.add(new Acteur(CandidatObj.getString("id"),vecAxes));
+						vecElecteurs.add(new CActeur(CandidatObj.getString("id"),vecAxes));
 				}
 			}
 			
@@ -63,19 +63,19 @@ public class Simulateur {
 		
 		switch(scrutin) {
 		case ALTERNATIF:
-			this.scrutin = new ScrutinAlternatif(algo, this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new CScrutinAlternatif(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case APPROBATION:
-			this.scrutin = new ScrutinApprobation(algo, this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new CScrutinApprobation(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case BORDA:
-			this.scrutin = new ScrutinBorda(algo, this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new CScrutinBorda(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case MAJORITAIRE_1_TOUR:
-			this.scrutin = new ScrutinMajoritaire1Tour(algo, this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new CScrutinMajoritaire1Tour(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case MAJORITAIRE_2_TOURS:
-			this.scrutin = new ScrutinMajoritaire2Tours(algo, this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new CScrutinMajoritaire2Tours(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		}
 
@@ -86,8 +86,8 @@ public class Simulateur {
 	 * Lance le scrutin enregistré et affiche les résultats
 	 */
 	public void Simuler() {
-		HashMap<Acteur,String> MapResult = this.scrutin.simuler();
-		for (Acteur actor : MapResult.keySet()) {
+		HashMap<CActeur,String> MapResult = this.scrutin.simuler();
+		for (CActeur actor : MapResult.keySet()) {
 		    System.out.println(actor.getNom() + " : " + MapResult.get(actor) + "");
 		}
 	}

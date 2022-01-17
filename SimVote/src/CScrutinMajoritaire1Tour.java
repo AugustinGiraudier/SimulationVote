@@ -5,27 +5,27 @@ import java.util.Vector;
  * Classe permettant de simuler un scrutin majoritaire à un tour
  * @author Augustin Giraudier et Arthur Secher Cabot
  */
-public class ScrutinMajoritaire1Tour extends Scrutin{
+public class CScrutinMajoritaire1Tour extends CScrutin{
 
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
 	 */
-	public ScrutinMajoritaire1Tour(AlgoProximite algo, Vector<Acteur> vecCandidats, Vector<Acteur> vecElecteurs) {
+	public CScrutinMajoritaire1Tour(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecElecteurs) {
 		super(algo, vecCandidats, vecElecteurs);
 	}
 
 	@Override
-	public HashMap<Acteur,String> simuler() {
+	public HashMap<CActeur,String> simuler() {
 		
 		Vector<Integer> vecVotes = new Vector<Integer>();
-		HashMap<Acteur,String> result = new HashMap<Acteur,String>();
+		HashMap<CActeur,String> result = new HashMap<CActeur,String>();
 		
-		for(Acteur electeur : this.vecElecteurs) {
+		for(CActeur electeur : this.vecElecteurs) {
 			int IndexMeilleurCandidat = -1;
 			double moyenneDifferencesCandidat = 500; //TODO rendre égal à une variable d'abstention
-			for(Acteur candidat : this.vecCandidats) {
+			for(CActeur candidat : this.vecCandidats) {
 				double moyenne;
 				try {
 					moyenne = electeur.getDistance(candidat, this.algoProximite);
@@ -42,7 +42,7 @@ public class ScrutinMajoritaire1Tour extends Scrutin{
 			vecVotes.add(IndexMeilleurCandidat);
 		}
 		
-		for(Acteur candidat : this.vecCandidats) {
+		for(CActeur candidat : this.vecCandidats) {
 			result.put(candidat, (100 * NombreIteration(vecVotes, this.vecCandidats.indexOf(candidat)) / this.vecCandidats.size() + "%"));
 		}
 		

@@ -34,7 +34,7 @@ public class SimVote {
 		//System.out.println(A);
 		//System.out.println(B);
 		
-		Simulateur sc = new Simulateur(AlgoProximite.SOMME_DIFFERENCES, ScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
+		CSimulateur sc = new CSimulateur(EAlgoProximite.SOMME_DIFFERENCES, EScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
 		sc.Simuler();
 	}
 }

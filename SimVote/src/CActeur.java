@@ -4,13 +4,13 @@ import java.util.Vector;
  * classe représentant un acteur (candidat ou electeur)
  * @author Augustin Giraudier et Arthur Secher Cabot
  */
-public class Acteur {
+public class CActeur {
 	
 	public static double SeuilProximiteActeurs = -1;
 	public static int nbrAxesPrincipaux = -1;
 	
 	private String nom;
-	protected Vector<Axe> vecAxes;
+	protected Vector<CAxe> vecAxes;
 	
 	/**
 	 * @return Le nom de l'acteur
@@ -22,11 +22,11 @@ public class Acteur {
 	 * @param _vecAxes : vecteur des axes d'opinion de l'acteur
 	 * @throws Exception
 	 */
-	public Acteur(String _nom, Vector<Axe> _vecAxes) throws Exception {
-		if(Acteur.SeuilProximiteActeurs == -1) {
+	public CActeur(String _nom, Vector<CAxe> _vecAxes) throws Exception {
+		if(CActeur.SeuilProximiteActeurs == -1) {
 			throw new Exception("Please Set The static variable Acteur.SeuilProximiteActeurs before instantiate it.");
 		}
-		else if(Acteur.nbrAxesPrincipaux == -1) {
+		else if(CActeur.nbrAxesPrincipaux == -1) {
 			throw new Exception("Please Set The static variable Acteur.nbrAxesPrincipaux before instantiate it.");
 		}
 		this.nom = _nom;
@@ -40,7 +40,7 @@ public class Acteur {
 	 * @return une valeur représentant la distance d'opinion
 	 * @throws Exception
 	 */
-	public double getDistance(Acteur a, AlgoProximite algo) throws Exception {
+	public double getDistance(CActeur a, EAlgoProximite algo) throws Exception {
 		switch(algo) {
 		case DISTANCE_VECTEUR:
 			return vectorDistance(a);
@@ -68,7 +68,7 @@ public class Acteur {
 	 * @param a : second acteur
 	 * @return la distance entre les vecteurs d'opinion des deux acteurs
 	 */
-	private double vectorDistance(Acteur a) {
+	private double vectorDistance(CActeur a) {
 		double[] vec1 = this.getVector();
 		double[] vec2 = a.getVector();
 		double sum = 0;
@@ -88,10 +88,10 @@ public class Acteur {
 	 * @param a : second acteur
 	 * @return la moyenne des différences entre les axes principaux d'opinion
 	 */
-	private double moyenneDiffAxesPrincipaux(Acteur a) {
+	private double moyenneDiffAxesPrincipaux(CActeur a) {
 		
-		Vector<Axe> vecA = new Vector<Axe>();
-		Vector<Axe> vecB = new Vector<Axe>();
+		Vector<CAxe> vecA = new Vector<CAxe>();
+		Vector<CAxe> vecB = new Vector<CAxe>();
 		
 		int[] positionsMax = new int[nbrAxesPrincipaux];
 		
@@ -115,8 +115,8 @@ public class Acteur {
 			vecA.add(this.vecAxes.get(i_axe));
 		
 		// On recupere les memes axes ches le candidat :
-		for(Axe axe : vecA) {
-			for(Axe axeB : a.vecAxes) {
+		for(CAxe axe : vecA) {
+			for(CAxe axeB : a.vecAxes) {
 				if(axe.memeNom(axeB)) {
 					vecB.add(axeB);
 				}
@@ -131,11 +131,11 @@ public class Acteur {
 	 * @param vecB : second vecteur
 	 * @return la moyenne des differences entre chaque terme des vecteurs
 	 */
-	private double moyenneDiff(Vector<Axe> vecA, Vector<Axe> vecB) {
+	private double moyenneDiff(Vector<CAxe> vecA, Vector<CAxe> vecB) {
 		Vector<Double> vecDiff = new Vector<Double>();
 		//TODO verifier les dims des vecteurs
-		for(Axe axe1 : vecA) {
-			for(Axe axe2 : vecB) {
+		for(CAxe axe1 : vecA) {
+			for(CAxe axe2 : vecB) {
 				if(axe1.memeNom(axe2)) {
 					vecDiff.add(axe1.getDistance(axe2));
 				}
@@ -151,7 +151,7 @@ public class Acteur {
 	@Override
 	public String toString() {
 		String out =  "*******************\nActeur: " + this.nom + "\nAxes :\n";
-		for(Axe a : this.vecAxes) {
+		for(CAxe a : this.vecAxes) {
 			out += a.toString();
 		}
 		return out + "*******************";
