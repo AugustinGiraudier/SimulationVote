@@ -82,21 +82,21 @@ public class CScrutinBorda extends CScrutin {
 		
 		for(Vector<CVoteBorda> vote : urne) {
 			for(int iVote = 0; iVote < this.IcoefBorda; iVote++) {
-				votesFinaux.get(indexOfActor(votesFinaux,vote.get(iVote).candidat)).score += this.IcoefBorda - iVote;
+				votesFinaux.get(indexOfActorinVec(votesFinaux,vote.get(iVote).candidat)).score += this.IcoefBorda - iVote;
 			}
 		}
 		
 		Vector<CResultScrutin> result = new Vector<CResultScrutin>();
 		int TotalPoints = SommeEntiers(this.IcoefBorda) * this.vecElecteurs.size();
 		for(CVoteBorda candidatVote : votesFinaux) {
-			int percentage = (int)(candidatVote.score *100 / TotalPoints);
-			result.add(new CResultScrutin(candidatVote.candidat, percentage, Integer.toString(percentage) + "%"));
+			double percentage = (candidatVote.score *100.0f / (double)TotalPoints);
+			result.add(new CResultScrutin(candidatVote.candidat, percentage, Double.toString(percentage) + "%"));
 		}
 		
 		return result;
 	}
 	
-	private int indexOfActor(Vector<CVoteBorda> vec, CActeur act) {
+	private int indexOfActorinVec(Vector<CVoteBorda> vec, CActeur act) {
 		for(int i = 0; i < vec.size(); i++) {
 			if(vec.get(i).candidat == act)
 				return i;

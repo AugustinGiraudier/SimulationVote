@@ -1,14 +1,14 @@
 public class CResultScrutin {
 
 	private CActeur acteur;
-	private float Fscore;
+	private double Fscore;
 	private String strScore;
 	
 	
-	public CResultScrutin(CActeur _acteur, float _Fscore) {
+	public CResultScrutin(CActeur _acteur, double _Fscore) {
 		this(_acteur, _Fscore, null);
 	}
-	public CResultScrutin(CActeur _acteur, float _Fscore, String _strScore) {
+	public CResultScrutin(CActeur _acteur, double _Fscore, String _strScore) {
 		this.acteur = _acteur;
 		this.Fscore = _Fscore;
 		this.strScore = _strScore;
@@ -17,7 +17,7 @@ public class CResultScrutin {
 	public CActeur getActeur() {
 		return acteur;
 	}
-	public float getIscore() {
+	public double getIscore() {
 		return Fscore;
 	}
 	public String getStrScore() {
@@ -29,7 +29,7 @@ public class CResultScrutin {
 		String out = this.acteur.getNom() + " : ";
 		
 		if(this.strScore == null) 
-			out += Float.toString(this.Fscore);
+			out += Double.toString(this.Fscore);
 		else
 			out += this.strScore;
 		

@@ -37,6 +37,7 @@ public class CSimulateur {
 			ConfigObj = new JSONObject(Files.readString(Paths.get(ConfigFilePath)));
 			CActeur.SeuilProximiteActeurs = ConfigObj.getDouble("Seuil_Proximite_Acteurs");
 			CActeur.nbrAxesPrincipaux = ConfigObj.getInt("Nbr_Axes_Principaux");
+			CActeur.SeuilDisatnceAbstention = ConfigObj.getInt("Seuil_Disatnce_Abstention");
 			BordaCoef = ConfigObj.getInt("NbCandidatsListeBorda");
 			
 			ActeursObj = new JSONObject(Files.readString(Paths.get(ActorsFilePath)));
@@ -55,8 +56,7 @@ public class CSimulateur {
 					}
 					if(strKey == "Candidats")
 						vecCandidats.add(new CActeur(CandidatObj.getString("id"),vecAxes));
-					else
-						vecElecteurs.add(new CActeur(CandidatObj.getString("id"),vecAxes));
+					vecElecteurs.add(new CActeur(CandidatObj.getString("id"),vecAxes));
 				}
 			}
 			

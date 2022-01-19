@@ -7,6 +7,7 @@ import java.util.Vector;
 public class CActeur {
 	
 	public static double SeuilProximiteActeurs = -1;
+	public static double SeuilDisatnceAbstention = -1;
 	public static int nbrAxesPrincipaux = -1;
 	
 	private String nom;
@@ -28,6 +29,9 @@ public class CActeur {
 		}
 		else if(CActeur.nbrAxesPrincipaux == -1) {
 			throw new Exception("Please Set The static variable CActeur.nbrAxesPrincipaux before instantiate it.");
+		}
+		else if(CActeur.SeuilDisatnceAbstention == -1) {
+			throw new Exception("Please Set The static variable CActeur.SeuilDisatnceAbstention before instantiate it.");
 		}
 		this.nom = _nom;
 		this.vecAxes = _vecAxes;
