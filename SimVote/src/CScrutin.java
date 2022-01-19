@@ -23,7 +23,7 @@ public abstract class CScrutin {
 	}
 
 	/**
-	 * @return le map 'Acteur' => 'pourcentage' de résultat du Scrutin
+	 * @return le résultat du Scrutin
 	 */
-	public abstract HashMap<CActeur,String> simuler();
+	public abstract Vector<CResultScrutin> simuler();
 }

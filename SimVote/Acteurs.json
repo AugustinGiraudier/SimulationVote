@@ -49,6 +49,34 @@
             "Capitalisme" : 0.2,
             "PouvoirAchat" : 0.4,
             "Immigration" : 0.2
+        },
+        {
+            "id" : "yves",
+            "Ecologie" : 0.2,
+            "Capitalisme" : 0.9,
+            "PouvoirAchat" : 0.2,
+            "Immigration" : 0.5
+        },
+        {
+            "id" : "nicolas",
+            "Ecologie" : 0.0,
+            "Capitalisme" : 0.9,
+            "PouvoirAchat" : 0.5,
+            "Immigration" : 0.7
+        },
+        {
+            "id" : "christian",
+            "Ecologie" : 0.8,
+            "Capitalisme" : 0.2,
+            "PouvoirAchat" : 0.2,
+            "Immigration" : 0.0
+        },
+        {
+            "id" : "vincent",
+            "Ecologie" : 0.7,
+            "Capitalisme" : 0.8,
+            "PouvoirAchat" : 0.5,
+            "Immigration" : 0.0
         }
     ]
 

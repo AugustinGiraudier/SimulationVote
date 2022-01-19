@@ -1,6 +1,5 @@
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Vector;
 
 import org.json.JSONArray;
@@ -86,9 +85,9 @@ public class CSimulateur {
 	 * Lance le scrutin enregistré et affiche les résultats
 	 */
 	public void Simuler() {
-		HashMap<CActeur,String> MapResult = this.scrutin.simuler();
-		for (CActeur actor : MapResult.keySet()) {
-		    System.out.println(actor.getNom() + " : " + MapResult.get(actor) + "");
+		Vector<CResultScrutin> VecResult = this.scrutin.simuler();
+		for (CResultScrutin rs : VecResult) {
+		    System.out.println(rs);
 		}
 	}
 	

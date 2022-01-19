@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -17,8 +16,8 @@ public class CScrutinBorda extends CScrutin {
 	}
 
 	@Override
-	public HashMap<CActeur,String> simuler() {
-		return new HashMap<CActeur,String>();
+	public Vector<CResultScrutin> simuler() {
+		return new Vector<CResultScrutin>();
 	}
 
 }

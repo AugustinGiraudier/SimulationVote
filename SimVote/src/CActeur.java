@@ -24,10 +24,10 @@ public class CActeur {
 	 */
 	public CActeur(String _nom, Vector<CAxe> _vecAxes) throws Exception {
 		if(CActeur.SeuilProximiteActeurs == -1) {
-			throw new Exception("Please Set The static variable Acteur.SeuilProximiteActeurs before instantiate it.");
+			throw new Exception("Please Set The static variable CActeur.SeuilProximiteActeurs before instantiate it.");
 		}
 		else if(CActeur.nbrAxesPrincipaux == -1) {
-			throw new Exception("Please Set The static variable Acteur.nbrAxesPrincipaux before instantiate it.");
+			throw new Exception("Please Set The static variable CActeur.nbrAxesPrincipaux before instantiate it.");
 		}
 		this.nom = _nom;
 		this.vecAxes = _vecAxes;

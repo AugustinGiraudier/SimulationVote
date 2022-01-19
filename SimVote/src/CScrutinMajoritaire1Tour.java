@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -17,10 +16,10 @@ public class CScrutinMajoritaire1Tour extends CScrutin{
 	}
 
 	@Override
-	public HashMap<CActeur,String> simuler() {
+	public Vector<CResultScrutin> simuler() {
 		
 		Vector<Integer> vecVotes = new Vector<Integer>();
-		HashMap<CActeur,String> result = new HashMap<CActeur,String>();
+		Vector<CResultScrutin> result = new Vector<CResultScrutin>();
 		
 		for(CActeur electeur : this.vecElecteurs) {
 			int IndexMeilleurCandidat = -1;
@@ -43,7 +42,8 @@ public class CScrutinMajoritaire1Tour extends CScrutin{
 		}
 		
 		for(CActeur candidat : this.vecCandidats) {
-			result.put(candidat, (100 * NombreIteration(vecVotes, this.vecCandidats.indexOf(candidat)) / this.vecCandidats.size() + "%"));
+			float score = (100 * NombreIteration(vecVotes, this.vecCandidats.indexOf(candidat)) / this.vecElecteurs.size());
+			result.add(new CResultScrutin(candidat, score, Float.toString(score) + "%"));
 		}
 		
 		return result;
