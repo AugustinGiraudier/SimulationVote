@@ -10,12 +10,10 @@ public class SimVote {
 	 */
 	public static void main(String[] args) throws Exception {
 		
-		System.out.println("test 1 :\n");
 		CSimulateur sc = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
 		sc.Simuler();
 		
-		System.out.println("\ntest 2 :\n");
-		CSimulateur sc2 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.MAJORITAIRE_2_TOURS, "Config.json","Acteurs.json");
+		CSimulateur sc2 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.BORDA, "Config.json","Acteurs.json");
 		sc2.Simuler();
 	}
 }

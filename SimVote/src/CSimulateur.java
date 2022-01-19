@@ -14,26 +14,30 @@ public class CSimulateur {
 	private Vector<CActeur> vecCandidats;
 	private Vector<CActeur> vecElecteurs;
 	private CScrutin scrutin;
+	private EScrutinType typeScrutin;
 	
 	/**
 	 * @param algo : algorithme de proximité à utiliser pour l'éléction
 	 * @param scrutin : type de scrutin à mettre en place
 	 * @param ConfigFilePath : chemin vers le fichier de configuration
 	 * @param ActorsFilePath : chemin vers le fichier des acteurs
+	 * @throws Exception 
 	 */
-	public CSimulateur(EAlgoProximite algo, EScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) {
+	public CSimulateur(EAlgoProximite algo, EScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) throws Exception {
 		
 		this.vecCandidats = new Vector<CActeur>();
 		this.vecElecteurs = new Vector<CActeur>();
+		this.typeScrutin = scrutin;
 		
 		JSONObject ConfigObj;
 		JSONObject ActeursObj;
+		int BordaCoef = 1;
 		try {
 			
 			ConfigObj = new JSONObject(Files.readString(Paths.get(ConfigFilePath)));
 			CActeur.SeuilProximiteActeurs = ConfigObj.getDouble("Seuil_Proximite_Acteurs");
 			CActeur.nbrAxesPrincipaux = ConfigObj.getInt("Nbr_Axes_Principaux");
-		
+			BordaCoef = ConfigObj.getInt("NbCandidatsListeBorda");
 			
 			ActeursObj = new JSONObject(Files.readString(Paths.get(ActorsFilePath)));
 			
@@ -68,7 +72,7 @@ public class CSimulateur {
 			this.scrutin = new CScrutinApprobation(algo, this.vecCandidats, this.vecElecteurs);
 			break;
 		case BORDA:
-			this.scrutin = new CScrutinBorda(algo, this.vecCandidats, this.vecElecteurs);
+			this.scrutin = new CScrutinBorda(algo, this.vecCandidats, this.vecElecteurs, BordaCoef);
 			break;
 		case MAJORITAIRE_1_TOUR:
 			this.scrutin = new CScrutinMajoritaire1Tour(algo, this.vecCandidats, this.vecElecteurs);
@@ -83,12 +87,15 @@ public class CSimulateur {
 	
 	/**
 	 * Lance le scrutin enregistré et affiche les résultats
+	 * @throws Exception 
 	 */
-	public void Simuler() {
+	public void Simuler() throws Exception {
 		Vector<CResultScrutin> VecResult = this.scrutin.simuler();
+		System.out.println("--- Results Scrutin " + this.typeScrutin.name() + " ---");
 		for (CResultScrutin rs : VecResult) {
 		    System.out.println(rs);
 		}
+		System.out.println("---");
 	}
 	
 }

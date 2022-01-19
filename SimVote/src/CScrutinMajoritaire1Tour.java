@@ -16,37 +16,39 @@ public class CScrutinMajoritaire1Tour extends CScrutin{
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler() {
+	public Vector<CResultScrutin> simuler() throws Exception {
 		
-		Vector<Integer> vecVotes = new Vector<Integer>();
-		Vector<CResultScrutin> result = new Vector<CResultScrutin>();
+//		Vector<Integer> vecVotes = new Vector<Integer>();
+//		Vector<CResultScrutin> result = new Vector<CResultScrutin>();
+//		
+//		for(CActeur electeur : this.vecElecteurs) {
+//			int IndexMeilleurCandidat = -1;
+//			double moyenneDifferencesCandidat = 500; //TODO rendre égal à une variable d'abstention
+//			for(CActeur candidat : this.vecCandidats) {
+//				double moyenne;
+//				try {
+//					moyenne = electeur.getDistance(candidat, this.algoProximite);
+//					if(moyenne < moyenneDifferencesCandidat) {
+//						// Cas d'un candidat meilleur :
+//						moyenneDifferencesCandidat = moyenne;
+//						IndexMeilleurCandidat = this.vecCandidats.indexOf(candidat);
+//					}
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					System.exit(1);
+//				}
+//			}
+//			vecVotes.add(IndexMeilleurCandidat);
+//		}
+//		
+//		for(CActeur candidat : this.vecCandidats) {
+//			float score = (100 * NombreIteration(vecVotes, this.vecCandidats.indexOf(candidat)) / this.vecElecteurs.size());
+//			result.add(new CResultScrutin(candidat, score, Float.toString(score) + "%"));
+//		}
 		
-		for(CActeur electeur : this.vecElecteurs) {
-			int IndexMeilleurCandidat = -1;
-			double moyenneDifferencesCandidat = 500; //TODO rendre égal à une variable d'abstention
-			for(CActeur candidat : this.vecCandidats) {
-				double moyenne;
-				try {
-					moyenne = electeur.getDistance(candidat, this.algoProximite);
-					if(moyenne < moyenneDifferencesCandidat) {
-						// Cas d'un candidat meilleur :
-						moyenneDifferencesCandidat = moyenne;
-						IndexMeilleurCandidat = this.vecCandidats.indexOf(candidat);
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.exit(1);
-				}
-			}
-			vecVotes.add(IndexMeilleurCandidat);
-		}
-		
-		for(CActeur candidat : this.vecCandidats) {
-			float score = (100 * NombreIteration(vecVotes, this.vecCandidats.indexOf(candidat)) / this.vecElecteurs.size());
-			result.add(new CResultScrutin(candidat, score, Float.toString(score) + "%"));
-		}
-		
-		return result;
+		// Un scrutin majoritaire un tour revient à un scrutin borda avec une liste de 1 candidat : 
+		CScrutinBorda sb = new CScrutinBorda(algoProximite, vecCandidats, vecElecteurs, 1);
+		return sb.simuler();
 	}
 	
 	/**

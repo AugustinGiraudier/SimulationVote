@@ -1,4 +1,3 @@
-import java.util.HashMap;
 import java.util.Vector;
 
 /**
@@ -24,6 +23,7 @@ public abstract class CScrutin {
 
 	/**
 	 * @return le résultat du Scrutin
+	 * @throws Exception 
 	 */
-	public abstract Vector<CResultScrutin> simuler();
+	public abstract Vector<CResultScrutin> simuler() throws Exception;
 }

@@ -16,7 +16,7 @@ public class CScrutinMajoritaire2Tours extends CScrutin {
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler() {
+	public Vector<CResultScrutin> simuler() throws Exception {
 		
 		// On crée un scrutin majoritaire à 1 tour pour simuler le premier tour :
 		CScrutinMajoritaire1Tour tour1 = new CScrutinMajoritaire1Tour(this.algoProximite, this.vecCandidats, this.vecElecteurs);

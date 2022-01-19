@@ -16,7 +16,7 @@ public class CActeur {
 	 * @return Le nom de l'acteur
 	 */
 	public String getNom() {return nom;}
-	
+
 	/**
 	 * @param _nom : nom de l'acteur
 	 * @param _vecAxes : vecteur des axes d'opinion de l'acteur
@@ -155,6 +155,18 @@ public class CActeur {
 			out += a.toString();
 		}
 		return out + "*******************";
+	}
+	
+	@Override
+	protected CActeur clone() throws CloneNotSupportedException {
+		try {
+			CActeur out;
+			out = new CActeur(this.nom, this.vecAxes);
+			return out;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 }
