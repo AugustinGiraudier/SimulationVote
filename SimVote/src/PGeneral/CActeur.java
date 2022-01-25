@@ -10,6 +10,7 @@ public class CActeur {
 	public static double SeuilProximiteActeurs = -1;
 	public static double SeuilDisatnceAbstention = -1;
 	public static int nbrAxesPrincipaux = -1;
+	public static double CoefInteraction = -1;
 	
 	private String nom;
 	protected Vector<CAxe> vecAxes;
@@ -34,6 +35,9 @@ public class CActeur {
 		else if(CActeur.SeuilDisatnceAbstention == -1) {
 			throw new Exception("Please Set The static variable CActeur.SeuilDisatnceAbstention before instantiate it.");
 		}
+		else if(CActeur.CoefInteraction == -1) {
+			throw new Exception("Please Set The static variable CActeur.CoefInteraction before instantiate it.");
+		}
 		this.nom = _nom;
 		this.vecAxes = _vecAxes;
 	}
@@ -48,11 +52,11 @@ public class CActeur {
 	public double getDistance(CActeur a, EAlgoProximite algo) throws Exception {
 		switch(algo) {
 		case DISTANCE_VECTEUR:
-			return vectorDistance(a);
+			return  vectorDistance(a);
 		case SOMME_DIFFERENCES:
-			return moyenneDiff(this.vecAxes, a.vecAxes);
+			return  moyenneDiff(this.vecAxes, a.vecAxes);
 		case SOMME_DIFFERENCES_AXES_PRINCIPAUX:
-			return moyenneDiffAxesPrincipaux(a);
+			return  moyenneDiffAxesPrincipaux(a);
 		default:
 			throw new Exception("Erreur : algorithme de proximité inconnu...");
 		}
@@ -151,6 +155,70 @@ public class CActeur {
 			sum += d;
 		}
 		return (sum/vecDiff.size());
+	}
+	
+	public void interact(CActeur other, EAlgoProximite algoProximite) throws Exception {
+		double distance = this.getDistance(other, algoProximite);
+		
+		//opinions proches :
+		if(distance < CActeur.SeuilProximiteActeurs) {
+			// on rapproche les oppignons
+			this.rapprocher(other);
+		}
+		
+		// opinions lointaines :
+		else if(distance > CActeur.SeuilDisatnceAbstention) {
+			// on les éloigne
+			this.eloigner(other);
+		}
+		// ni proches ni éloignés : on ne fait rien...
+	}
+	
+	private void rapprocher(CActeur other) {
+		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
+			
+			// si trop proches, on break (rapprochement innutile)
+			if(Math.abs(this.vecAxes.get(i_axe).getValeur() - other.vecAxes.get(i_axe).getValeur()) < CActeur.CoefInteraction)
+				break;
+			
+			// sinon on les compare :
+			int comp = this.vecAxes.get(i_axe).compareTo(other.vecAxes.get(i_axe));
+			CActeur A, B;
+			
+			if(comp < 0){
+				A = this;
+				B = other;
+			}
+			else {
+				A = other;
+				B = this;
+			}
+			double valA = A.vecAxes.get(i_axe).getValeur();
+			double valB = B.vecAxes.get(i_axe).getValeur();
+			A.vecAxes.get(i_axe).setValeur(valA - CActeur.CoefInteraction < 0 ? 0 : valA - CActeur.CoefInteraction);
+			B.vecAxes.get(i_axe).setValeur(valB + CActeur.CoefInteraction > 1 ? 1 : valB + CActeur.CoefInteraction);
+		}
+	}
+	private void eloigner(CActeur other) {
+		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
+			
+			// on les compare :
+			int comp = this.vecAxes.get(i_axe).compareTo(other.vecAxes.get(i_axe));
+			CActeur A, B;
+			
+			if(comp < 0){
+				A = this;
+				B = other;
+			}
+			else {
+				A = other;
+				B = this;
+			}
+			double valA = A.vecAxes.get(i_axe).getValeur();
+			double valB = B.vecAxes.get(i_axe).getValeur();
+			A.vecAxes.get(i_axe).setValeur(valA + CActeur.CoefInteraction > 1 ? 1 : valA + CActeur.CoefInteraction);
+			B.vecAxes.get(i_axe).setValeur(valB - CActeur.CoefInteraction < 0 ? 0 : valB - CActeur.CoefInteraction);
+		}
 	}
 	
 	@Override

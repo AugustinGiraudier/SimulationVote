@@ -28,6 +28,8 @@ public class CAxe implements Comparable<CAxe> {
 	 * @return la valeur associée à l'axe
 	 */
 	public double getValeur() {return valeur;}
+
+	public void setValeur(double value) {this.valeur = value;}
 	/**
 	 * @return le nom associé à l'axe
 	 */

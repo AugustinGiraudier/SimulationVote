@@ -1,3 +1,7 @@
+import java.util.Vector;
+
+import PGeneral.CActeur;
+import PGeneral.CAxe;
 import PGeneral.CSimulateur;
 import PGeneral.EAlgoProximite;
 import PGeneral.EScrutinType;
@@ -14,6 +18,34 @@ public class SimVote {
 	 */
 	public static void main(String[] args) throws Exception {
 		
+		
+//		CActeur.CoefInteraction = 0.05;
+//		CActeur.nbrAxesPrincipaux = 2;
+//		CActeur.SeuilDisatnceAbstention = 0.70;
+//		CActeur.SeuilProximiteActeurs = 0.3;
+//		
+//		Vector<CAxe> vec1 = new Vector<CAxe>();
+//		vec1.add(new CAxe("test", 0.1));
+//		vec1.add(new CAxe("test2", 0.8));
+//		CActeur act1 = new CActeur("bernard", vec1);
+//		
+//		Vector<CAxe> vec2 = new Vector<CAxe>();
+//		vec2.add(new CAxe("test", 0.8));
+//		vec2.add(new CAxe("test2", 0.1));
+//		CActeur act2 = new CActeur("didier", vec2);
+//		
+//		System.out.println(act1);
+//		System.out.println(act2);
+//		
+//		System.out.println(act1.getDistance(act2, EAlgoProximite.DISTANCE_VECTEUR));
+//		
+//		act1.interact(act2, EAlgoProximite.DISTANCE_VECTEUR);
+//		
+//		System.out.println(act1);
+//		System.out.println(act2);
+		
+		
+		
 		CSimulateur sc = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.MAJORITAIRE_1_TOUR, "Config.json","Acteurs.json");
 		sc.Simuler();
 		
@@ -24,6 +56,7 @@ public class SimVote {
 		sc2.Simuler();
 		
 		CSimulateur sc3 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.APPROBATION, "Config.json","Acteurs.json");
+		sc3.interact(20);
 		sc3.Simuler();
 		
 		CSimulateur sc4 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.ALTERNATIF, "Config.json","Acteurs.json");

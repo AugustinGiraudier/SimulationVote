@@ -1,6 +1,7 @@
 package PGeneral;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Random;
 import java.util.Vector;
 
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ public class CSimulateur {
 	private Vector<CActeur> vecElecteurs;
 	private CScrutin scrutin;
 	private EScrutinType typeScrutin;
+	private EAlgoProximite algo;
 	
 	/**
 	 * @param algo : algorithme de proximité à utiliser pour l'éléction
@@ -36,6 +38,7 @@ public class CSimulateur {
 		this.vecCandidats = new Vector<CActeur>();
 		this.vecElecteurs = new Vector<CActeur>();
 		this.typeScrutin = scrutin;
+		this.algo = algo;
 		
 		JSONObject ConfigObj;
 		JSONObject ActeursObj;
@@ -46,6 +49,7 @@ public class CSimulateur {
 			CActeur.SeuilProximiteActeurs = ConfigObj.getDouble("Seuil_Proximite_Acteurs");
 			CActeur.nbrAxesPrincipaux = ConfigObj.getInt("Nbr_Axes_Principaux");
 			CActeur.SeuilDisatnceAbstention = ConfigObj.getInt("Seuil_Disatnce_Abstention");
+			CActeur.CoefInteraction = ConfigObj.getDouble("Coef_interaction");
 			BordaCoef = ConfigObj.getInt("NbCandidatsListeBorda");
 			
 			ActeursObj = new JSONObject(Files.readString(Paths.get(ActorsFilePath)));
@@ -104,6 +108,19 @@ public class CSimulateur {
 		    System.out.println(rs);
 		}
 		System.out.println("---");
+	}
+	
+	public void interact(int nbInteractions) throws Exception {
+		
+		Random rand = new Random(); 
+		
+		for(int i_interaction = 0; i_interaction < nbInteractions; i_interaction++) {
+			// tirage au sort de 2 electeurs :
+			int elec1 = rand.nextInt(this.vecElecteurs.size());
+			int elec2 = rand.nextInt(this.vecElecteurs.size());
+			
+			this.vecElecteurs.get(elec1).interact(this.vecElecteurs.get(elec2), this.algo);
+		}
 	}
 	
 }
