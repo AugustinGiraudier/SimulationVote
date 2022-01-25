@@ -1,3 +1,4 @@
+package PGeneral;
 /**
  * Enum des différents scrutins implémentés
  * @author Augustin Giraudier et Arthur Secher Cabot

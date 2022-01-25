@@ -1,4 +1,9 @@
+package PScrutins;
 import java.util.Vector;
+
+import PGeneral.CActeur;
+import PGeneral.CResultScrutin;
+import PGeneral.EAlgoProximite;
 
 /**
  * Classe permettant la simulation d'un scrutin alternatif

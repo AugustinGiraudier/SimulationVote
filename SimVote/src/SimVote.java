@@ -1,3 +1,7 @@
+import PGeneral.CSimulateur;
+import PGeneral.EAlgoProximite;
+import PGeneral.EScrutinType;
+
 /**
  * Classe principale
  * @author Augustin Giraudier et Arthur Secher Cabot

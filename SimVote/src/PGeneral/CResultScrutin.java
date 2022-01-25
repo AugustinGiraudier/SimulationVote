@@ -1,3 +1,4 @@
+package PGeneral;
 public class CResultScrutin {
 
 	private CActeur acteur;

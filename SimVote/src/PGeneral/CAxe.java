@@ -1,3 +1,4 @@
+package PGeneral;
 /**
  * Classe gérant un axe d'opinion
  * @author Augustin Giraudier et Arthur Secher Cabot

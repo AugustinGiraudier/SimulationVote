@@ -1,4 +1,10 @@
+package PScrutins;
+
 import java.util.Vector;
+
+import PGeneral.CActeur;
+import PGeneral.CResultScrutin;
+import PGeneral.EAlgoProximite;
 
 /**
  * classe abstraite servant de base aux différents scrutins

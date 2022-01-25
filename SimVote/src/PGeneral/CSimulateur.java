@@ -1,9 +1,17 @@
+package PGeneral;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Vector;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import PScrutins.CScrutin;
+import PScrutins.CScrutinAlternatif;
+import PScrutins.CScrutinApprobation;
+import PScrutins.CScrutinBorda;
+import PScrutins.CScrutinMajoritaire1Tour;
+import PScrutins.CScrutinMajoritaire2Tours;
 
 /**
  * Classe Permettant de simuler une éléction
