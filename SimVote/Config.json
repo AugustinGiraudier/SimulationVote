@@ -1,5 +1,5 @@
 {
-    "Seuil_Proximite_Acteurs" : 0.3,
+    "Seuil_Proximite_Acteurs" : 1,
     "Seuil_Disatnce_Abstention" : 0.6,
     "Nbr_Axes_Principaux" : 1,
     "NbCandidatsListeBorda" : 2

@@ -21,5 +21,8 @@ public class SimVote {
 		
 		CSimulateur sc3 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.APPROBATION, "Config.json","Acteurs.json");
 		sc3.Simuler();
+		
+		CSimulateur sc4 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.ALTERNATIF, "Config.json","Acteurs.json");
+		sc4.Simuler();
 	}
 }

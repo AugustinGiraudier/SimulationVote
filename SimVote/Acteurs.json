@@ -7,6 +7,13 @@
     ],
     "Candidats" : [
         {
+            "id" : "Jadot",
+            "Ecologie" : 1,
+            "Capitalisme" : 0,
+            "PouvoirAchat" : 0.5,
+            "Immigration" : 0
+        },
+        {
             "id" : "Fillon",
             "Ecologie" : 0.1,
             "Capitalisme" : 1,
