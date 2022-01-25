@@ -1,7 +1,3 @@
-import java.util.Vector;
-
-import PGeneral.CActeur;
-import PGeneral.CAxe;
 import PGeneral.CSimulateur;
 import PGeneral.EAlgoProximite;
 import PGeneral.EScrutinType;
@@ -56,7 +52,9 @@ public class SimVote {
 		sc2.Simuler();
 		
 		CSimulateur sc3 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.APPROBATION, "Config.json","Acteurs.json");
+		sc3.sonder(100);
 		sc3.interact(20);
+		sc3.sonder(100);
 		sc3.Simuler();
 		
 		CSimulateur sc4 = new CSimulateur(EAlgoProximite.DISTANCE_VECTEUR, EScrutinType.ALTERNATIF, "Config.json","Acteurs.json");

@@ -1,6 +1,9 @@
 package PGeneral;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
@@ -25,6 +28,8 @@ public class CSimulateur {
 	private CScrutin scrutin;
 	private EScrutinType typeScrutin;
 	private EAlgoProximite algo;
+	private String ConfigFilePath;
+	private String ActorsFilePath;
 	
 	/**
 	 * @param algo : algorithme de proximité à utiliser pour l'éléction
@@ -104,10 +109,14 @@ public class CSimulateur {
 	public void Simuler() throws Exception {
 		Vector<CResultScrutin> VecResult = this.scrutin.simuler();
 		System.out.println("--- Results Scrutin " + this.typeScrutin.name() + " ---");
+		DisplayResults(VecResult);
+		System.out.println("---");
+	}
+	
+	private void DisplayResults(Vector<CResultScrutin> VecResult) {
 		for (CResultScrutin rs : VecResult) {
 		    System.out.println(rs);
 		}
-		System.out.println("---");
 	}
 	
 	public void interact(int nbInteractions) throws Exception {
@@ -121,6 +130,35 @@ public class CSimulateur {
 			
 			this.vecElecteurs.get(elec1).interact(this.vecElecteurs.get(elec2), this.algo);
 		}
+	}
+	
+	public void sonder(int popPercentage/*, int nbInteractions*/) throws Exception {
+		
+		if(popPercentage < 0 || popPercentage > 100) {
+			throw new Exception("Percentage out of [0;100]");
+		}
+		
+		// tirage d'une séquence aléatoire pour le sondage :
+		int size = this.vecElecteurs.size();
+		List<Integer> indexes = new ArrayList<Integer>(size); 
+		for (int i = 0; i < size; i++) 
+		  indexes.add(i); 
+		Collections.shuffle(indexes);
+		
+		// on recupere la proportion donnée :
+		Vector<CActeur> vecSondes = new Vector<CActeur>();
+		int nbSondes = (int)((double)popPercentage * size / 100.0d);
+		for(int i_sondes = 0; i_sondes < nbSondes ; i_sondes++) {
+			vecSondes.add(this.vecElecteurs.get(indexes.get(i_sondes)));
+		}
+		
+		CScrutinMajoritaire1Tour sondage = new CScrutinMajoritaire1Tour(algo, this.vecCandidats, vecSondes);
+		
+		Vector<CResultScrutin> VecResult = sondage.simuler();
+		System.out.println("--- Results Sondage sur " + Integer.toString(popPercentage) 
+			+ "% de la population (soit " + Integer.toString(nbSondes) + " personnes) ---");
+		DisplayResults(VecResult);
+		System.out.println("---");
 	}
 	
 }
