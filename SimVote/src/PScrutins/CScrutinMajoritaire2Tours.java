@@ -16,18 +16,18 @@ public class CScrutinMajoritaire2Tours extends CScrutin {
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutinMajoritaire2Tours(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
-		super(algo, vecCandidats, vecAll);
+	public CScrutinMajoritaire2Tours(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(vecCandidats, vecAll);
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler() throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
 		
 		// On crée un scrutin majoritaire à 1 tour pour simuler le premier tour :
-		CScrutinMajoritaire1Tour tour1 = new CScrutinMajoritaire1Tour(this.algoProximite, this.vecCandidats, this.vecAll);
+		CScrutinMajoritaire1Tour tour1 = new CScrutinMajoritaire1Tour(this.vecCandidats, this.vecAll);
 		
 		// On simule le tour :
-		Vector<CResultScrutin> result1 = tour1.simuler();
+		Vector<CResultScrutin> result1 = tour1.simuler(algoProximite);
 		
 		// On crée des variables pour stocker les deux meilleurs candidats :
 		CResultScrutin firstActor = new CResultScrutin(null, 0);
@@ -48,8 +48,8 @@ public class CScrutinMajoritaire2Tours extends CScrutin {
 		vecCandidatsTour2.add(secondActor.getActeur());
 		
 		// Puis on simule le dernier tour :
-		CScrutinMajoritaire1Tour tour2 = new CScrutinMajoritaire1Tour(this.algoProximite, vecCandidatsTour2, this.vecAll);
-		return tour2.simuler();
+		CScrutinMajoritaire1Tour tour2 = new CScrutinMajoritaire1Tour(vecCandidatsTour2, this.vecAll);
+		return tour2.simuler(algoProximite);
 	}
 
 }

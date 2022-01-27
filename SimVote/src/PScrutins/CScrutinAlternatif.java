@@ -18,8 +18,8 @@ public class CScrutinAlternatif extends CScrutin {
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutinAlternatif(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
-		super(algo, vecCandidats, vecAll);
+	public CScrutinAlternatif(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(vecCandidats, vecAll);
 	}
 
 	
@@ -29,7 +29,7 @@ public class CScrutinAlternatif extends CScrutin {
 	}
 	
 	@Override
-	public Vector<CResultScrutin> simuler() throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
 		
 		this.nbAbstention = 0;
 		
@@ -44,7 +44,7 @@ public class CScrutinAlternatif extends CScrutin {
 			for(CActeur candidat : this.vecCandidats) {
 				CVoteAlter vote = new CVoteAlter();
 				vote.acteur = candidat;
-				vote.score = electeur.getDistance(candidat, this.algoProximite);
+				vote.score = electeur.getDistance(candidat, algoProximite);
 				vecVote.add(vote);
 			}
 			

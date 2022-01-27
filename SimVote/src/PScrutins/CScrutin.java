@@ -14,24 +14,22 @@ public abstract class CScrutin {
 	
 	protected Vector<CActeur> vecCandidats;
 	protected Vector<CActeur> vecAll;
-	protected EAlgoProximite algoProximite;
 	
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutin(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+	public CScrutin(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
 		this.vecCandidats = vecCandidats;
 		this.vecAll = vecAll;
-		this.algoProximite = algo;
 	}
 
 	/**
 	 * @return le résultat du Scrutin
 	 * @throws Exception 
 	 */
-	public abstract Vector<CResultScrutin> simuler() throws Exception;
+	public abstract Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception;
 	
 	public double ComuteAbstention(Vector<CResultScrutin> res){
 		double sum = 0;

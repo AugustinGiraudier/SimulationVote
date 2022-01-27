@@ -16,16 +16,16 @@ public class CScrutinMajoritaire1Tour extends CScrutin{
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutinMajoritaire1Tour(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
-		super(algo, vecCandidats, vecAll);
+	public CScrutinMajoritaire1Tour(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(vecCandidats, vecAll);
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler() throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
 		
 		// Un scrutin majoritaire un tour revient à un scrutin borda avec une liste de 1 candidat : 
-		CScrutinBorda sb = new CScrutinBorda(algoProximite, vecCandidats, vecAll, 1);
-		return sb.simuler();
+		CScrutinBorda sb = new CScrutinBorda(vecCandidats, vecAll, 1);
+		return sb.simuler(algoProximite);
 		
 	}
 	

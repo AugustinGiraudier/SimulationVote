@@ -1,4 +1,11 @@
 {
+	"Axes" : [
+        "Ecologie",
+        "Capitalisme",
+        "PouvoirAchat",
+        "Immigration"
+    ],
+	
     "#1" : "Distance en dessous de laquelle les acteurs sont considérés proches :",
     "Seuil_Proximite_Acteurs" : 0.3,
 

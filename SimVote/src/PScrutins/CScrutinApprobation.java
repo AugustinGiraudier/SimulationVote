@@ -18,8 +18,8 @@ public class CScrutinApprobation extends CScrutin{
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutinApprobation(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
-		super(algo, vecCandidats, vecAll);
+	public CScrutinApprobation(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(vecCandidats, vecAll);
 	}
 	
 	private class CVoteAppro{
@@ -28,7 +28,7 @@ public class CScrutinApprobation extends CScrutin{
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler() throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
 		
 		this.nbAbstention = 0;
 		

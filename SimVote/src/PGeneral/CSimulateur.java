@@ -26,6 +26,9 @@ public class CSimulateur {
 	private Vector<CActeur> vecCandidats;
 	private Vector<CActeur> vecElecteurs;
 	private Vector<CActeur> vecAll;
+	
+	private Vector<String> vecStrAxes;
+	
 	private CScrutin scrutin;
 	private EScrutinType typeScrutin;
 	private EAlgoProximite algo;
@@ -52,6 +55,45 @@ public class CSimulateur {
 		changeScrutin(scrutin);
 		
 	}
+	
+	
+	public CSimulateur(
+			EAlgoProximite algo,
+			EScrutinType scrutin, 
+			String ConfigFilePath,
+			int nbrCandidats,
+			int nbrElecteurs
+			) throws Exception {
+		
+		this.algo = algo;
+		this.typeScrutin = scrutin;
+		this.vecCandidats = new Vector<>(nbrCandidats);
+		this.vecElecteurs = new Vector<>(nbrElecteurs);
+		this.vecAll = new Vector<>(nbrElecteurs + nbrCandidats);
+		this.vecStrAxes = new Vector<>();
+		
+		loadConfigFile(ConfigFilePath);
+		
+		Random RD = new Random();
+		
+		// Tirage Aleatoire des Candidats :
+		for(int i_candidat=0 ; i_candidat < nbrCandidats ; i_candidat++) {
+			CActeur cand = createRandomActor("Candidat-" + Integer.toString(i_candidat), RD);
+			this.vecCandidats.add(cand);
+			this.vecAll.add(cand);
+		}
+		
+		// Tirage Aleatoire des Electeurs :
+		for(int i_electeur=0 ; i_electeur < nbrElecteurs ; i_electeur++) {
+			CActeur cand = createRandomActor("Electeur-" + Integer.toString(i_electeur), RD);
+			this.vecElecteurs.add(cand);
+			this.vecAll.add(cand);
+		}
+		
+		changeScrutin(scrutin);
+		
+	}
+	
 	/**
 	 * @param algo : algorithme de proximité à utiliser pour l'éléction
 	 * @param scrutin : type de scrutin à mettre en place
@@ -66,9 +108,10 @@ public class CSimulateur {
 			String ActorsFilePath
 			) throws Exception {
 		
-		this.vecCandidats = new Vector<CActeur>();
-		this.vecElecteurs = new Vector<CActeur>();
-		this.vecAll = new Vector<CActeur>();
+		this.vecCandidats = new Vector<>();
+		this.vecElecteurs = new Vector<>();
+		this.vecAll = new Vector<>();
+		this.vecStrAxes = new Vector<>();
 		this.typeScrutin = scrutin;
 		this.algo = algo;
 		
@@ -77,6 +120,14 @@ public class CSimulateur {
 
 		changeScrutin(scrutin);
 
+	}
+	
+	private CActeur createRandomActor(String name, Random RD) throws Exception {
+		Vector<CAxe> vecAxes = new Vector<>();
+		for(String strAxe : this.vecStrAxes) {
+			vecAxes.add(new CAxe(strAxe, RD.nextDouble()));
+		}
+		return new CActeur(name, vecAxes);
 	}
 	
 	private void loadConfigFile(String ConfigFilePath) {
@@ -90,6 +141,10 @@ public class CSimulateur {
 			CActeur.CoefInteraction = ConfigObj.getDouble("Coef_interaction");
 			CSimulateur.CoefBorda = ConfigObj.getInt("NbCandidatsListeBorda");
 			
+			JSONArray AxesArr = ConfigObj.getJSONArray("Axes");
+			for(int i_axe = 0; i_axe < AxesArr.length(); i_axe++)
+				vecStrAxes.add(AxesArr.getString(i_axe));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -100,8 +155,6 @@ public class CSimulateur {
 		try {
 			ActeursObj = new JSONObject(Files.readString(Paths.get(ActorsFilePath)));
 			
-			JSONArray AxesArr = ActeursObj.getJSONArray("Axes");
-			
 			String[] keys = {"Candidats", "Electeurs"};
 			
 			for(String strKey : keys) {
@@ -109,8 +162,8 @@ public class CSimulateur {
 				for(int i_candidat=0; i_candidat < ActeurArr.length(); i_candidat++) {
 					JSONObject CandidatObj = ActeurArr.getJSONObject(i_candidat);
 					Vector<CAxe> vecAxes = new Vector<CAxe>();
-					for(int i_axe = 0; i_axe < AxesArr.length(); i_axe++) {
-						vecAxes.add(new CAxe(AxesArr.getString(i_axe), CandidatObj.getDouble(AxesArr.getString(i_axe))));
+					for(String strAxe : this.vecStrAxes) {
+						vecAxes.add(new CAxe(strAxe, CandidatObj.getDouble(strAxe)));
 					}
 					if(strKey == "Candidats")
 						vecCandidats.add(new CActeur(CandidatObj.getString("id"),vecAxes));

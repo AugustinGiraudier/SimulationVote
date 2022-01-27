@@ -20,8 +20,8 @@ public class CScrutinBorda extends CScrutin {
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 * @throws Exception 
 	 */
-	public CScrutinBorda(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll, int coefBorda) throws Exception {
-		super(algo, vecCandidats, vecAll);
+	public CScrutinBorda(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll, int coefBorda) throws Exception {
+		super(vecCandidats, vecAll);
 		
 		if(coefBorda > vecCandidats.size())
 			throw new Exception("Cannot instantiate Borda Ballot with coefBorda > nb electeors");
@@ -42,7 +42,7 @@ public class CScrutinBorda extends CScrutin {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Vector<CResultScrutin> simuler() throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
 		
 		Vector<Vector<CVoteBorda>> urne = new Vector<Vector<CVoteBorda>>();
 		
@@ -54,7 +54,7 @@ public class CScrutinBorda extends CScrutin {
 			// Ajout des Scores :
 			for(CVoteBorda VB : vecVote) {
 				try {
-					VB.score = electeur.getDistance(VB.candidat, this.algoProximite);
+					VB.score = electeur.getDistance(VB.candidat, algoProximite);
 				} catch (Exception e) {
 					e.printStackTrace();
 					System.exit(1);
