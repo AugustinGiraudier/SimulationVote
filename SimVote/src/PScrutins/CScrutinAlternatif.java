@@ -11,13 +11,15 @@ import PGeneral.EAlgoProximite;
  */
 public class CScrutinAlternatif extends CScrutin {
 
+	private int nbAbstention = 0;
+	
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
+	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutinAlternatif(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecElecteurs) {
-		super(algo, vecCandidats, vecElecteurs);
+	public CScrutinAlternatif(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(algo, vecCandidats, vecAll);
 	}
 
 	
@@ -29,10 +31,12 @@ public class CScrutinAlternatif extends CScrutin {
 	@Override
 	public Vector<CResultScrutin> simuler() throws Exception {
 		
+		this.nbAbstention = 0;
+		
 		Vector<Vector<CVoteAlter>> urne = new Vector<Vector<CVoteAlter>>();
 		
 		// Création de la liste d'intentions de vote pour chaque élécteur :
-		for(CActeur electeur : this.vecElecteurs) {
+		for(CActeur electeur : this.vecAll) {
 			
 			Vector<CVoteAlter> vecVote = new Vector<CVoteAlter>();
 			
@@ -45,6 +49,12 @@ public class CScrutinAlternatif extends CScrutin {
 			}
 			
 			this.sortByScore(vecVote);
+			
+			// Si le candidat le plus proche est quand meme tres éloigné, on break (abstention)
+			if(vecVote.get(0).score > CActeur.SeuilDisatnceAbstention) {
+				this.nbAbstention++;
+				break;
+			}
 			
 			// on l'ajoute à l'urne
 			urne.add(vecVote);
@@ -138,6 +148,11 @@ public class CScrutinAlternatif extends CScrutin {
 		
 		return actLoose;
 		
+	}
+	
+	@Override
+	public double ComuteAbstention(Vector<CResultScrutin> res) {
+		return nbAbstention / (float)this.vecAll.size() * 100;
 	}
 
 }

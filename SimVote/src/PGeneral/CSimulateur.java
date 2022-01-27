@@ -114,6 +114,7 @@ public class CSimulateur {
 		Vector<CResultScrutin> VecResult = this.scrutin.simuler();
 		System.out.println("--- Results Scrutin " + this.typeScrutin.name() + " ---");
 		DisplayResults(VecResult);
+		System.out.println("ABSTENTION : " + Double.toString(this.scrutin.ComuteAbstention(VecResult)) + "%");
 		System.out.println("---");
 	}
 	

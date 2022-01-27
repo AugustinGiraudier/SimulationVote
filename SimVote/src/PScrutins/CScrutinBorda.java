@@ -17,11 +17,11 @@ public class CScrutinBorda extends CScrutin {
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
+	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 * @throws Exception 
 	 */
-	public CScrutinBorda(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecElecteurs, int coefBorda) throws Exception {
-		super(algo, vecCandidats, vecElecteurs);
+	public CScrutinBorda(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll, int coefBorda) throws Exception {
+		super(algo, vecCandidats, vecAll);
 		
 		if(coefBorda > vecCandidats.size())
 			throw new Exception("Cannot instantiate Borda Ballot with coefBorda > nb electeors");
@@ -42,11 +42,11 @@ public class CScrutinBorda extends CScrutin {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Vector<CResultScrutin> simuler() {
+	public Vector<CResultScrutin> simuler() throws Exception {
 		
 		Vector<Vector<CVoteBorda>> urne = new Vector<Vector<CVoteBorda>>();
 		
-		for(CActeur electeur : this.vecElecteurs) {
+		for(CActeur electeur : this.vecAll) {
 			
 			// Création du vecteur des votes pour chaque candidat :
 			Vector<CVoteBorda> vecVote = this.GetVoteBordaVector();
@@ -71,6 +71,11 @@ public class CScrutinBorda extends CScrutin {
 				}
 			}
 			
+			
+			// Si le candidat le plus proche est quand meme tres éloigné, on break (abstention)
+			if(vecVote.get(0).score > CActeur.SeuilDisatnceAbstention)
+				break;
+			
 			// Récupération du vote final :
 			Vector<CVoteBorda> finalVote = new Vector<CVoteBorda>();
 			for(int iCoefBorda = 0; iCoefBorda < this.IcoefBorda; iCoefBorda++) {
@@ -92,12 +97,12 @@ public class CScrutinBorda extends CScrutin {
 		}
 		
 		Vector<CResultScrutin> result = new Vector<CResultScrutin>();
-		int TotalPoints = SommeEntiers(this.IcoefBorda) * this.vecElecteurs.size();
+		int TotalPoints = SommeEntiers(this.IcoefBorda) * this.vecAll.size();
 		for(CVoteBorda candidatVote : votesFinaux) {
 			double percentage = (candidatVote.score *100.0f / (double)TotalPoints);
 			result.add(new CResultScrutin(candidatVote.candidat, percentage, Double.toString(percentage) + "%"));
 		}
-		
+
 		return result;
 	}
 	

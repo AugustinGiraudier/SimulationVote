@@ -13,17 +13,17 @@ import PGeneral.EAlgoProximite;
 public abstract class CScrutin {
 	
 	protected Vector<CActeur> vecCandidats;
-	protected Vector<CActeur> vecElecteurs;
+	protected Vector<CActeur> vecAll;
 	protected EAlgoProximite algoProximite;
 	
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
+	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutin(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecElecteurs) {
+	public CScrutin(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
 		this.vecCandidats = vecCandidats;
-		this.vecElecteurs = vecElecteurs;
+		this.vecAll = vecAll;
 		this.algoProximite = algo;
 	}
 
@@ -32,4 +32,12 @@ public abstract class CScrutin {
 	 * @throws Exception 
 	 */
 	public abstract Vector<CResultScrutin> simuler() throws Exception;
+	
+	public double ComuteAbstention(Vector<CResultScrutin> res){
+		double sum = 0;
+		for(CResultScrutin RS : res)
+			sum += RS.getIscore();
+		return 100 - sum < 0.001 ? 0.0d : 100 - sum;
+	}
+	
 }

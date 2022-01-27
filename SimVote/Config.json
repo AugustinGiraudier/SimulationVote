@@ -11,6 +11,6 @@
     "#4" : "Nombre de candidats à trier dans un sondage de type Borda",
     "NbCandidatsListeBorda" : 2,
 
-    "#5" : "Pas d'interaction par axe :",
+    "#5" : "Coef d'interaction par axe (ajouté ou retiré pour s'approcher ou s'éloigner) :",
     "Coef_interaction" : 0.2
 }

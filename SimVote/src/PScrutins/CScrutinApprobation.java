@@ -11,13 +11,15 @@ import PGeneral.EAlgoProximite;
  */
 public class CScrutinApprobation extends CScrutin{
 
+	private int nbAbstention = 0;
+	
 	/**
 	 * @param algo : algorithme de proximité à utiliser
 	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecElecteurs : vecteur d'acteurs contenant les electeurs
+	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 */
-	public CScrutinApprobation(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecElecteurs) {
-		super(algo, vecCandidats, vecElecteurs);
+	public CScrutinApprobation(EAlgoProximite algo, Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(algo, vecCandidats, vecAll);
 	}
 	
 	private class CVoteAppro{
@@ -28,14 +30,21 @@ public class CScrutinApprobation extends CScrutin{
 	@Override
 	public Vector<CResultScrutin> simuler() throws Exception {
 		
+		this.nbAbstention = 0;
+		
 		Vector<CVoteAppro> vecVote = generateVecAppro();
 		
 		// Approbations de chaque electeur :
-		for(CActeur electeur : this.vecElecteurs) {
+		for(CActeur electeur : this.vecAll) {
+			int nbAppro = 0;
 			for(CVoteAppro CA : vecVote) {
-				if(electeur.getDistance(CA.acteur, algoProximite) < CActeur.SeuilProximiteActeurs)
+				if(electeur.getDistance(CA.acteur, algoProximite) < CActeur.SeuilProximiteActeurs) {
 					CA.nbrApprobation++;
+					nbAppro++;
+				}
 			}
+			if(nbAppro == 0)
+				this.nbAbstention++;
 		}
 		
 		// Dépouillage : 
@@ -54,6 +63,11 @@ public class CScrutinApprobation extends CScrutin{
 			vec.add(CA);
 		}
 		return vec;
+	}
+	
+	@Override
+	public double ComuteAbstention(Vector<CResultScrutin> res) {
+		return nbAbstention / (float)this.vecAll.size() * 100;
 	}
 
 }
