@@ -174,6 +174,27 @@ public class CActeur {
 		// ni proches ni éloignés : on ne fait rien...
 	}
 	
+	public void rapprocherCandidat(CActeur candidat, EAlgoProximite algoProximite) {
+		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
+					
+			// si trop proches, on break (rapprochement innutile)
+			if(Math.abs(this.vecAxes.get(i_axe).getValeur() - candidat.vecAxes.get(i_axe).getValeur()) < CActeur.CoefInteraction)
+				break;
+			// sinon on les compare :
+			int comp = this.vecAxes.get(i_axe).compareTo(candidat.vecAxes.get(i_axe));
+			
+			double val = this.vecAxes.get(i_axe).getValeur();
+			
+			if(comp < 0){
+				this.vecAxes.get(i_axe).setValeur(val - CActeur.CoefInteraction < 0 ? 0 : val - CActeur.CoefInteraction);
+			}
+			else {
+				this.vecAxes.get(i_axe).setValeur(val - CActeur.CoefInteraction > 1 ? 1 : val + CActeur.CoefInteraction);
+			}
+			
+		}
+	}
+	
 	private void rapprocher(CActeur other) {
 		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
 			
@@ -199,6 +220,7 @@ public class CActeur {
 			B.vecAxes.get(i_axe).setValeur(valB + CActeur.CoefInteraction > 1 ? 1 : valB + CActeur.CoefInteraction);
 		}
 	}
+	
 	private void eloigner(CActeur other) {
 		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
 			

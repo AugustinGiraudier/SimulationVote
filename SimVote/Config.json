@@ -12,5 +12,5 @@
     "NbCandidatsListeBorda" : 2,
 
     "#5" : "Pas d'interaction par axe :",
-    "Coef_interaction" : 0.05
+    "Coef_interaction" : 0.2
 }
