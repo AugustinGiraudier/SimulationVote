@@ -29,9 +29,29 @@ public class CSimulateur {
 	private CScrutin scrutin;
 	private EScrutinType typeScrutin;
 	private EAlgoProximite algo;
-	//private String ConfigFilePath;
-	//private String ActorsFilePath;
 	
+	private static int CoefBorda = 1;
+	
+	
+	public CSimulateur(
+			EAlgoProximite algo,
+			EScrutinType scrutin, 
+			String ConfigFilePath,
+			Vector<CActeur> vecCandidats, 
+			Vector<CActeur> vecElecteurs, 
+			Vector<CActeur> vecAll
+			) throws Exception {
+		
+		this.algo = algo;
+		this.typeScrutin = scrutin;
+		this.vecAll = vecAll;
+		this.vecCandidats = vecCandidats;
+		this.vecElecteurs = vecElecteurs;
+		
+		loadConfigFile(ConfigFilePath);
+		changeScrutin(scrutin);
+		
+	}
 	/**
 	 * @param algo : algorithme de proximité à utiliser pour l'éléction
 	 * @param scrutin : type de scrutin à mettre en place
@@ -39,7 +59,12 @@ public class CSimulateur {
 	 * @param ActorsFilePath : chemin vers le fichier des acteurs
 	 * @throws Exception 
 	 */
-	public CSimulateur(EAlgoProximite algo, EScrutinType scrutin, String ConfigFilePath, String ActorsFilePath) throws Exception {
+	public CSimulateur(
+			EAlgoProximite algo,
+			EScrutinType scrutin, 
+			String ConfigFilePath, 
+			String ActorsFilePath
+			) throws Exception {
 		
 		this.vecCandidats = new Vector<CActeur>();
 		this.vecElecteurs = new Vector<CActeur>();
@@ -47,9 +72,15 @@ public class CSimulateur {
 		this.typeScrutin = scrutin;
 		this.algo = algo;
 		
+		loadConfigFile(ConfigFilePath);
+		loadActorsFile(ActorsFilePath);
+
+		changeScrutin(scrutin);
+
+	}
+	
+	private void loadConfigFile(String ConfigFilePath) {
 		JSONObject ConfigObj;
-		JSONObject ActeursObj;
-		int BordaCoef = 1;
 		try {
 			
 			ConfigObj = new JSONObject(Files.readString(Paths.get(ConfigFilePath)));
@@ -57,8 +88,16 @@ public class CSimulateur {
 			CActeur.nbrAxesPrincipaux = ConfigObj.getInt("Nbr_Axes_Principaux");
 			CActeur.SeuilDisatnceAbstention = ConfigObj.getInt("Seuil_Disatnce_Abstention");
 			CActeur.CoefInteraction = ConfigObj.getDouble("Coef_interaction");
-			BordaCoef = ConfigObj.getInt("NbCandidatsListeBorda");
+			CSimulateur.CoefBorda = ConfigObj.getInt("NbCandidatsListeBorda");
 			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void loadActorsFile(String ActorsFilePath) {
+		JSONObject ActeursObj;
+		try {
 			ActeursObj = new JSONObject(Files.readString(Paths.get(ActorsFilePath)));
 			
 			JSONArray AxesArr = ActeursObj.getJSONArray("Axes");
@@ -84,25 +123,26 @@ public class CSimulateur {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+	}
+	
+	public void changeScrutin(EScrutinType scrutin) throws Exception {
 		switch(scrutin) {
 		case ALTERNATIF:
-			this.scrutin = new CScrutinAlternatif(algo, this.vecCandidats, this.vecAll);
+			this.scrutin = new CScrutinAlternatif(this.vecCandidats, this.vecAll);
 			break;
 		case APPROBATION:
-			this.scrutin = new CScrutinApprobation(algo, this.vecCandidats, this.vecAll);
+			this.scrutin = new CScrutinApprobation(this.vecCandidats, this.vecAll);
 			break;
 		case BORDA:
-			this.scrutin = new CScrutinBorda(algo, this.vecCandidats, this.vecAll, BordaCoef);
+			this.scrutin = new CScrutinBorda(this.vecCandidats, this.vecAll, CSimulateur.CoefBorda);
 			break;
 		case MAJORITAIRE_1_TOUR:
-			this.scrutin = new CScrutinMajoritaire1Tour(algo, this.vecCandidats, this.vecAll);
+			this.scrutin = new CScrutinMajoritaire1Tour(this.vecCandidats, this.vecAll);
 			break;
 		case MAJORITAIRE_2_TOURS:
-			this.scrutin = new CScrutinMajoritaire2Tours(algo, this.vecCandidats, this.vecAll);
+			this.scrutin = new CScrutinMajoritaire2Tours(this.vecCandidats, this.vecAll);
 			break;
 		}
-
 	}
 	
 	
@@ -111,7 +151,7 @@ public class CSimulateur {
 	 * @throws Exception 
 	 */
 	public void Simuler() throws Exception {
-		Vector<CResultScrutin> VecResult = this.scrutin.simuler();
+		Vector<CResultScrutin> VecResult = this.scrutin.simuler(this.algo);
 		System.out.println("--- Results Scrutin " + this.typeScrutin.name() + " ---");
 		DisplayResults(VecResult);
 		System.out.println("ABSTENTION : " + Double.toString(this.scrutin.ComuteAbstention(VecResult)) + "%");
@@ -137,7 +177,7 @@ public class CSimulateur {
 		}
 	}
 	
-	public Vector<CResultScrutin> sonder(int popPercentage/*, int nbInteractions*/) throws Exception {
+	public Vector<CResultScrutin> sonder(int popPercentage) throws Exception {
 		
 		if(popPercentage < 0 || popPercentage > 100) {
 			throw new Exception("Percentage out of [0;100]");
@@ -157,9 +197,9 @@ public class CSimulateur {
 			vecSondes.add(this.vecAll.get(indexes.get(i_sondes)));
 		}
 		
-		CScrutinMajoritaire1Tour sondage = new CScrutinMajoritaire1Tour(algo, this.vecCandidats, vecSondes);
+		CScrutinMajoritaire1Tour sondage = new CScrutinMajoritaire1Tour(this.vecCandidats, vecSondes);
 		
-		Vector<CResultScrutin> VecResult = sondage.simuler();
+		Vector<CResultScrutin> VecResult = sondage.simuler(this.algo);
 		
 //		System.out.println("--- Results Sondage sur " + Integer.toString(popPercentage) 
 //			+ "% de la population (soit " + Integer.toString(nbSondes) + " personnes) ---");
@@ -181,7 +221,7 @@ public class CSimulateur {
 				CActeur candidat = sondageResults.get(i_acteur).getActeur();
 				double score = sondageResults.get(i_acteur).getIscore();
 				
-				double utilite = (1/electeur.getDistance(candidat, algo)) * score;
+				double utilite = (1/electeur.getDistance(candidat, this.algo)) * score;
 				
 				if(utilite > utiliteMax) {
 					utiliteMax = utilite;
