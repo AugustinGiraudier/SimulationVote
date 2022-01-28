@@ -21,7 +21,7 @@ import PScrutins.CScrutinMajoritaire1Tour;
 import PScrutins.CScrutinMajoritaire2Tours;
 
 /**
- * Classe Permettant de simuler une éléction
+ * Classe Permettant de simuler une éléction et d'interagir avec le scrutin
  * @author Augustin Giraudier et Arthur Secher Cabot
  */
 public class CSimulateur {
@@ -38,28 +38,48 @@ public class CSimulateur {
 	
 	private static int CoefBorda = 1;
 	
-	
+	/**
+	 * Crée un simulateur avec des acteurs déja créés
+	 * @param algo algo de proximité
+	 * @param scrutin type de scrutin
+	 * @param ConfigFilePath emplacement du fichier de config
+	 * @param vecCandidats liste de candidats
+	 * @param vecElecteurs liste des electeurs
+	 * @throws CFatalException si scrutin inéxistant
+	 */
 	public CSimulateur(
 			EAlgoProximite algo,
 			EScrutinType scrutin,
 			String ConfigFilePath,
 			Vector<CActeur> vecCandidats,
-			Vector<CActeur> vecElecteurs,
-			Vector<CActeur> vecAll
-			) throws Exception {
+			Vector<CActeur> vecElecteurs
+			) throws CFatalException{
 		
 		this.algo = algo;
 		this.typeScrutin = scrutin;
-		this.vecAll = vecAll;
 		this.vecCandidats = vecCandidats;
 		this.vecElecteurs = vecElecteurs;
+		
+		this.vecAll = new Vector<>(vecCandidats.size() + vecElecteurs.size());
+		for(CActeur act : this.vecCandidats)
+			vecAll.add(act);
+		for(CActeur act : this.vecElecteurs)
+			vecAll.add(act);
 		
 		loadConfigFile(ConfigFilePath);
 		changeScrutin(scrutin);
 		
 	}
 	
-	
+	/**
+	 * Crée un simulateur avec des acteurs aléatoires
+	 * @param algo algo de proximité
+	 * @param scrutin type de scrutin
+	 * @param ConfigFilePath emplacement du fichier de config
+	 * @param nbrCandidats nombre de candidats à générer
+	 * @param nbrElecteurs nombre d'électeurs à générer
+	 * @throws CFatalException si scrutin inéxistant
+	 */
 	public CSimulateur(
 			EAlgoProximite algo,
 			EScrutinType scrutin, 
@@ -98,11 +118,12 @@ public class CSimulateur {
 	}
 	
 	/**
-	 * @param algo : algorithme de proximité à utiliser pour l'éléction
-	 * @param scrutin : type de scrutin à mettre en place
-	 * @param ConfigFilePath : chemin vers le fichier de configuration
-	 * @param ActorsFilePath : chemin vers le fichier des acteurs
-	 * @throws Exception 
+	 * Crée un simulateur à partir d'un fichier json d'acteurs
+	 * @param algo algorithme de proximité à utiliser pour l'éléction
+	 * @param scrutin type de scrutin à mettre en place
+	 * @param ConfigFilePath chemin vers le fichier de configuration
+	 * @param ActorsFilePath chemin vers le fichier des acteurs
+	 * @throws CFatalException si scrutin inéxistant
 	 */
 	public CSimulateur(
 			EAlgoProximite algo,
@@ -125,6 +146,13 @@ public class CSimulateur {
 
 	}
 	
+	/**
+	 * Crée un nouvel acteur aléatoire
+	 * @param name nom de l'acteur
+	 * @param RD objet de type Random pour le tirage
+	 * @return le nouvel acteur créé aléatoirement
+	 * @throws CFatalException si erreur random
+	 */
 	private CActeur createRandomActor(String name, Random RD)throws CFatalException{
 		Vector<CAxe> vecAxes = new Vector<>();
 		for(String strAxe : this.vecStrAxes) {
@@ -138,6 +166,10 @@ public class CSimulateur {
 		return new CActeur(name, vecAxes);
 	}
 	
+	/**
+	 * Charge les configs depuis le fichier
+	 * @param ConfigFilePath chemin du fichier json de configuration
+	 */
 	private void loadConfigFile(String ConfigFilePath) {
 		JSONObject ConfigObj;
 		try {
@@ -158,6 +190,10 @@ public class CSimulateur {
 		}
 	}
 	
+	/**
+	 * Charge les acteurs à partir du fichier d'acteurs
+	 * @param ActorsFilePath chemin vers les fichier json des acteurs
+	 */
 	private void loadActorsFile(String ActorsFilePath) {
 		JSONObject ActeursObj;
 		try {
@@ -186,10 +222,19 @@ public class CSimulateur {
 		}
 	}
 	
+	/**
+	 * Change l'algo de proximité du simulateur
+	 * @param algo nouvel algo
+	 */
 	public void changeAlgo(EAlgoProximite algo){
 		this.algo = algo;
 	}
 	
+	/**
+	 * Change le scrutin utilisé par le simulateur
+	 * @param scrutin nouveau type de scrutin à utiliser
+	 * @throws CFatalException si coef de Broda source d'erreur
+	 */
 	public void changeScrutin(EScrutinType scrutin) throws CFatalException {
 		switch(scrutin) {
 		case ALTERNATIF:
@@ -224,8 +269,8 @@ public class CSimulateur {
 	
 	
 	/**
-	 * Lance le scrutin enregistré et affiche les résultats
-	 * @throws CFatalException
+	 * Simule scrutin enregistré et affiche les résultats
+	 * @throws CFatalException /
 	 */
 	public void Simuler() throws CFatalException{
 		Vector<CResultScrutin> VecResult = this.scrutin.simuler(this.algo);
@@ -235,6 +280,10 @@ public class CSimulateur {
 		System.out.println("---");
 	}
 	
+	/**
+	 * Permet d'afficher les résultats d'un sondage ou scrutin
+	 * @param VecResult liste des résultats
+	 */
 	public void DisplayResults(Vector<CResultScrutin> VecResult) {
 		// Tris des résultats :
 		boolean changeHappent = true;
@@ -254,19 +303,30 @@ public class CSimulateur {
 		}
 	}
 	
+	/**
+	 * Permet de générer des interactions aléatoires entre les electeurs
+	 * @param nbInteractions nombre d'interactions à générer
+	 * @throws CFatalException /
+	 */
 	public void interact(int nbInteractions) throws CFatalException {
 		
 		Random rand = new Random(); 
 		
 		for(int i_interaction = 0; i_interaction < nbInteractions; i_interaction++) {
 			// tirage au sort de 2 electeurs :
-			int elec1 = rand.nextInt(this.vecAll.size());
-			int elec2 = rand.nextInt(this.vecAll.size());
+			int elec1 = rand.nextInt(this.vecElecteurs.size());
+			int elec2 = rand.nextInt(this.vecElecteurs.size());
 			
-			this.vecAll.get(elec1).interact(this.vecAll.get(elec2), this.algo);
+			this.vecElecteurs.get(elec1).interact(this.vecElecteurs.get(elec2), this.algo);
 		}
 	}
 	
+	/**
+	 * Effectue un sondage sur une proportion de la population
+	 * @param popPercentage proportion de la pop à sonder (en %)
+	 * @return le resultat du sondage
+	 * @throws CFatalException /
+	 */
 	public Vector<CResultScrutin> sonder(int popPercentage) throws CFatalException{
 		
 		if(popPercentage < 0 || popPercentage > 100) {
@@ -294,6 +354,11 @@ public class CSimulateur {
 		return VecResult;
 	}
 	
+	/**
+	 * Génère une interaction de tous les electeurs avec un résultat de sondage
+	 * @param sondageResults liste de résultats d'un sondage ou scrutin
+	 * @throws CFatalException /
+	 */
 	public void interactWithSondage(Vector<CResultScrutin> sondageResults) throws CFatalException {
 		
 		// pour chaque electeur :
@@ -324,6 +389,9 @@ public class CSimulateur {
 		}
 	}
 	
+	/**
+	 * Affiche les informations générales relatives au scrutin en cours
+	 */
 	public void PrintInfos() {
 		System.out.println("\n----------------- Infos Scrutin -----------------");
 		System.out.println("Type de scrutin : " + this.typeScrutin.toString());
@@ -334,6 +402,9 @@ public class CSimulateur {
 		System.out.println("-------------------------------------------------\n");
 	}
 	
+	/**
+	 * Affiche le résumé de tous les candidats du scrutin
+	 */
 	public void PrintCandidates() {
 		System.out.println("\n----------------- Infos Candidats -----------------");
 		for(CActeur cand : this.vecCandidats) {

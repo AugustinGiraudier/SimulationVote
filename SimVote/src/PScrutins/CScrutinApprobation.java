@@ -16,19 +16,21 @@ public class CScrutinApprobation extends CScrutin{
 	private int nbAbstention = 0;
 	
 	/**
-	 * @param algo : algorithme de proximité à utiliser
-	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecAll : vecteur d'acteurs contenant les electeurs
+	 * Classe représentant un vote dans un scrutin par approbation
+	 */
+	private class CVoteAppro{
+		public CActeur acteur;
+		public int nbrApprobation = 0;
+	}
+	
+	/**
+	 * @param vecCandidats vecteur d'acteurs contenant les candidats
+	 * @param vecAll vecteur d'acteurs contenant les electeurs
 	 */
 	public CScrutinApprobation(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
 		super(vecCandidats, vecAll);
 	}
 	
-	private class CVoteAppro{
-		public CActeur acteur;
-		public int nbrApprobation = 0;
-	}
-
 	@Override
 	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite)throws CFatalException{
 		
@@ -62,6 +64,10 @@ public class CScrutinApprobation extends CScrutin{
 		return vecResults;
 	}
 	
+	/**
+	 * Génère un vecteur pouvant comptabiliser les votes par approbation pour chaque candidat
+	 * @return le vecteur généré
+	 */
 	private Vector<CVoteAppro> generateVecAppro(){
 		Vector<CVoteAppro> vec = new Vector<CVoteAppro>();
 		for(CActeur act : this.vecCandidats) {

@@ -17,9 +17,8 @@ public abstract class CScrutin {
 	protected Vector<CActeur> vecAll;
 	
 	/**
-	 * @param algo : algorithme de proximité à utiliser
-	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecAll : vecteur d'acteurs contenant les electeurs
+	 * @param vecCandidats vecteur d'acteurs contenant les candidats
+	 * @param vecAll vecteur d'acteurs contenant les electeurs
 	 */
 	public CScrutin(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
 		this.vecCandidats = vecCandidats;
@@ -27,11 +26,17 @@ public abstract class CScrutin {
 	}
 
 	/**
+	 * @param algoProximite : algo de proximité
 	 * @return le résultat du Scrutin
-	 * @throws Exception 
+	 * @throws CFatalException /
 	 */
 	public abstract Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws CFatalException;
 	
+	/**
+	 * Calcule l'abstention en fonction du résultat d'un scrutin
+	 * @param res résultat d'un scrutin
+	 * @return le pourcentage d'abstention
+	 */
 	public double ComuteAbstention(Vector<CResultScrutin> res){
 		double sum = 0;
 		for(CResultScrutin RS : res)

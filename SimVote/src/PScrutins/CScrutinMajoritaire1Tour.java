@@ -14,9 +14,8 @@ import PGeneral.EAlgoProximite;
 public class CScrutinMajoritaire1Tour extends CScrutin{
 
 	/**
-	 * @param algo : algorithme de proximité à utiliser
-	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecAll : vecteur d'acteurs contenant les electeurs
+	 * @param vecCandidats vecteur d'acteurs contenant les candidats
+	 * @param vecAll vecteur d'acteurs contenant les electeurs
 	 */
 	public CScrutinMajoritaire1Tour(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
 		super(vecCandidats, vecAll);
@@ -35,20 +34,4 @@ public class CScrutinMajoritaire1Tour extends CScrutin{
 		return sb.simuler(algoProximite);
 		
 	}
-	
-	/**
-	 * Compte le nombre d'occurence d'une valeur dans un vecteur
-	 * @param vec : vecteur à observer
-	 * @param intToCount : valeur dont on compte les occurences
-	 * @return le nombre d'occurrence de 'intToCount' dans 'vec'
-	 */
-	private int NombreIteration(Vector<Integer> vec, int intToCount) {
-		int count = 0;
-		for(int i : vec) {
-			if(i==intToCount)
-				count++;
-		}
-		return count;
-	}
-
 }

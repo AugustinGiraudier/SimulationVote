@@ -4,13 +4,86 @@ import java.util.Scanner;
 
 import PExceptions.CFatalException;
 
+/**
+ * Classe regroupant les methodes statiques utiles pour afficher le menu 
+ * et pour les decisions utilisateur
+ * @author Augustin Giraudier et Arthur Secher Cabot
+ *
+ */
 public class CMenuTools {
 
 	private CMenuTools() {};
 	private static final int LARGEUR_MENU = 42;
 	private static Scanner SC;
 	
+	/**
+	 * Enum des manieres de chosir les acteurs
+	 * @author Augustin Giraudier et Arthur Secher Cabot
+	 *
+	 */
+	public enum EChoixActeurs{
+		/**
+		 * Acteurs générés avec le fichier Json
+		 */
+		ACTEURS_FICHIER,
+		/**
+		 * Acteurs générés aléatoirement
+		 */
+		ACTEURS_ALEATOIRES
+	}
 	
+	/**
+	 * Classe conservant les données pour générer des acteurs aléatoires
+	 * @author Augustin Giraudier et Arthur Secher Cabot
+	 *
+	 */
+	public static class CActeursAlea{
+		/**
+		 * nombre de candidats à créer
+		 */
+		public int nbCandidats;
+		/**
+		 * nombre d'électeurs à créer
+		 */
+		public int nbElecteurs;
+		/**
+		 * Crée un nouvel indice d'acteurs aléatoires
+		 * @param nbCand nombre de candidats
+		 * @param nbElec nombre d'electeurs
+		 */
+		public CActeursAlea(int nbCand, int nbElec) {
+			nbCandidats = nbCand;
+			nbElecteurs = nbElec;
+		}
+	}
+	
+	/**
+	 * Enum représentant les différentes branches du menu principal
+	 * @author Augustin Giraudier et Arthur Secher Cabot
+	 *
+	 */
+	public enum EMainActions{
+		/** Simuler un scrutin */
+		SIMULATE,
+		/** Afficher les infos */
+		INFOS,
+		/** Réaliser un sondage */
+		SURVEY,
+		/** Générer des interactions */
+		INTERACTIONS,
+		/** Changer l'algo de proximité */
+		CHANGE_ALGO,
+		/** Changer de scrutin */
+		CHANGE_BALLOT,
+		/** Changer les acteurs */
+		CHANGE_ACTORS,
+		/** Quitter l'application*/
+		QUIT
+	}
+	
+	/**
+	 * Affiche le header du menu
+	 */
 	private static void PrintHeader() {
 		System.out.println("+----------------------------------------+");
 		System.out.println("|            Simulation  Vote            |");
@@ -18,6 +91,10 @@ public class CMenuTools {
 		System.out.println("+----------------------------------------+");
 	}
 	
+	/**
+	 * Affiche un titre centré par rapport au header
+	 * @param Title titre à afficher
+	 */
 	private static void PrintTitle(String Title) {
 		int a = (int)Math.floor((CMenuTools.LARGEUR_MENU - Title.length() - 6)/2);
 		String strSpaces = "";
@@ -26,6 +103,12 @@ public class CMenuTools {
 		System.out.println("+- " + strSpaces + Title + strSpaces + (Title.length()%2 == 0 ? "" : " ") + " -+");
 		System.out.println("+----------------------------------------+");
 	}
+	
+	/**
+	 * Demande une entrée clavier à l'utilisateur et renvoie son choix
+	 * @return l'input de l'utilisateur
+	 * @throws CFatalException si erreur d'input
+	 */
 	private static String getUserChoice() throws CFatalException {
 		if(CMenuTools.SC == null)
 			CMenuTools.SC = new Scanner(System.in);
@@ -38,12 +121,21 @@ public class CMenuTools {
 			throw new CFatalException("Invalid user input");
 		}
 	}
+	
+	/**
+	 * Génere une pause d'affichage ou l'utilisateur doit appuyer sur entrer pour continuer
+	 */
 	public static void Pause() {
 		System.out.println("Appuyez sur Entrer pour continuer...");
 		SC.nextLine();
 		SC.nextLine();
 	}
 	
+	/**
+	 * Demande de choisir un scrutin
+	 * @return le scrutin choisi
+	 * @throws CFatalException /
+	 */
 	public static EScrutinType PrintChoixScrutin() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -72,6 +164,11 @@ public class CMenuTools {
 		
 	}
 	
+	/**
+	 * Demande de choisir un algo de proximité
+	 * @return l'algo choisi
+	 * @throws CFatalException /
+	 */
 	public static EAlgoProximite PrintChoixAlgo() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -93,11 +190,12 @@ public class CMenuTools {
 		}
 		
 	}
-	
-	public enum EChoixActeurs{
-		ACTEURS_FICHIER,
-		ACTEURS_ALEATOIRES
-	}
+
+	/**
+	 * Demande comment choisir les acteurs
+	 * @return la methode de choix d'acteur choisie
+	 * @throws CFatalException /
+	 */
 	public static EChoixActeurs PrintChoixActeurs() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -117,15 +215,11 @@ public class CMenuTools {
 		
 	}
 	
-	public static class CActeursAlea{
-		public int nbCandidats;
-		public int nbElecteurs;
-		public CActeursAlea(int nbCand, int nbElec) {
-			nbCandidats = nbCand;
-			nbElecteurs = nbElec;
-		}
-	}
-	
+	/**
+	 * Demande le nombre de candidats et d'electeurs à généreer aléatoirement
+	 * @return un objet contenant les deux valeurs
+	 * @throws CFatalException /
+	 */
 	public static CActeursAlea BrancheActeursAleatoires() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -157,17 +251,11 @@ public class CMenuTools {
 		}	
 	}
 	
-	public enum EMainActions{
-		SIMULATE,
-		INFOS,
-		SURVEY,
-		INTERACTIONS,
-		CHANGE_ALGO,
-		CHANGE_BALLOT,
-		CHANGE_ACTORS,
-		QUIT
-	}
-	
+	/**
+	 * Demande une action principale
+	 * @return l'action choisie
+	 * @throws CFatalException /
+	 */
 	public static EMainActions PrintMainMenu() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -204,6 +292,11 @@ public class CMenuTools {
 		}
 	}
 	
+	/**
+	 * Demande si affichage des candidats
+	 * @return true si oui ; false sinon
+	 * @throws CFatalException /
+	 */
 	public static boolean BrancheInfos() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -222,6 +315,11 @@ public class CMenuTools {
 		}
 	}
 	
+	/**
+	 * Demande le pourcentage de la pop sur laquelle effectuer le sondage
+	 * @return le pourcentage
+	 * @throws CFatalException /
+	 */
 	public static int BrancheSondage() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -239,6 +337,12 @@ public class CMenuTools {
 			return percent;
 		}
 	}
+	
+	/**
+	 * Demande si le sondage doit intergagir avec la population
+	 * @return true si oui ; false sinon
+	 * @throws CFatalException /
+	 */
 	public static boolean BrancheSondageInteractions() throws CFatalException {
 		while(true) {
 			PrintHeader();
@@ -257,6 +361,11 @@ public class CMenuTools {
 		}
 	}
 	
+	/**
+	 * Demande le nombre d'interactions à simuler
+	 * @return le nombre choisi
+	 * @throws CFatalException /
+	 */
 	public static int BrancheInteractions() throws CFatalException {
 		while(true) {
 			PrintHeader();

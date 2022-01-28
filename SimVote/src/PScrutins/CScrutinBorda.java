@@ -14,12 +14,23 @@ public class CScrutinBorda extends CScrutin {
 
 	int IcoefBorda; // Nombre de personne dans la liste de chaque electeur
 	
+	/**
+	 * Classe représentant un vote dans un scrutin Borda
+	 */
+	private class CVoteBorda{
+		public CActeur candidat;
+		public double score;
+		
+		public String toString() {
+			return candidat.getNom() + " : " + Double.toString(score);
+		}
+	}
 	
 	/**
-	 * @param algo : algorithme de proximité à utiliser
-	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecAll : vecteur d'acteurs contenant les electeurs
-	 * @throws Exception 
+	 * @param vecCandidats vecteur d'acteurs contenant les candidats
+	 * @param vecAll vecteur d'acteurs contenant les electeurs
+	 * @param coefBorda nombre de vote par candidat
+	 * @throws CUnknownParameterException /
 	 */
 	public CScrutinBorda(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll, int coefBorda) throws CUnknownParameterException {
 		super(vecCandidats, vecAll);
@@ -30,18 +41,6 @@ public class CScrutinBorda extends CScrutin {
 		this.IcoefBorda = coefBorda;
 	}
 	
-	
-	private class CVoteBorda{
-		public CActeur candidat;
-		public double score;
-		
-		public String toString() {
-			return candidat.getNom() + " : " + Double.toString(score);
-		}
-	}
-	
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite){
 		
@@ -107,6 +106,12 @@ public class CScrutinBorda extends CScrutin {
 		return result;
 	}
 	
+	/**
+	 * Donne l'index du candidat dans la liste
+	 * @param vec liste des votes de type borda
+	 * @param act acteur à cibler
+	 * @return l'index de l'acteur ou -1 si introuvable
+	 */
 	private int indexOfActorinVec(Vector<CVoteBorda> vec, CActeur act) {
 		for(int i = 0; i < vec.size(); i++) {
 			if(vec.get(i).candidat == act)
@@ -115,6 +120,10 @@ public class CScrutinBorda extends CScrutin {
 		return -1;
 	}
 	
+	/**
+	 * Génère un vecteur pouvant comptabiliser les votes Borda pour chaque candidat
+	 * @return le vecteur généré
+	 */
 	private Vector<CVoteBorda> GetVoteBordaVector(){
 		
 		// Création du vecteur des votes pour chaque candidat :
@@ -130,6 +139,11 @@ public class CScrutinBorda extends CScrutin {
 		return vecVote;
 	}
 	
+	/**
+	 * Réalise une somme des entiers bornée
+	 * @param index borne suppérieure
+	 * @return la somme des entiers de 0 à la borne
+	 */
 	private int SommeEntiers(int index) {
 		int result = 0;
 		for(int i_summ = 1; i_summ <= index; i_summ++) {

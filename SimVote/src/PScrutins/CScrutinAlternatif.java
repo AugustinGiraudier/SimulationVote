@@ -16,19 +16,21 @@ public class CScrutinAlternatif extends CScrutin {
 	private int nbAbstention = 0;
 	
 	/**
-	 * @param algo : algorithme de proximité à utiliser
-	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecAll : vecteur d'acteurs contenant les electeurs
+	 * Classe représentant un vote dans un scrutin alternatif
 	 */
-	public CScrutinAlternatif(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
-		super(vecCandidats, vecAll);
-	}
-
-	
 	private class CVoteAlter{
 		public CActeur acteur;
 		public double score;
 	}
+	
+	/**
+	 * @param vecCandidats vecteur d'acteurs contenant les candidats
+	 * @param vecAll vecteur d'acteurs contenant les electeurs
+	 */
+	public CScrutinAlternatif(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
+		super(vecCandidats, vecAll);
+	}
+	
 	
 	@Override
 	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws CFatalException {
@@ -91,6 +93,10 @@ public class CScrutinAlternatif extends CScrutin {
 		return result ;
 	}
 	
+	/**
+	 * Génère un vecteur pouvant comptabiliser les votes alternatifs pour chaque candidat
+	 * @return le vecteur généré
+	 */
 	private Vector<CVoteAlter> getVecCandidats(){
 		Vector<CVoteAlter> vec = new Vector<CVoteAlter>();
 		
@@ -103,6 +109,11 @@ public class CScrutinAlternatif extends CScrutin {
 		return vec;
 	}
 	
+	/**
+	 * Cherche l'acteur dans la liste et incrémente son score
+	 * @param vec vecteur de votes
+	 * @param actor acteur à incrémenter
+	 */
 	private void IncrementWhereActor(Vector<CVoteAlter> vec, CActeur actor) {
 		for(CVoteAlter VA : vec) {
 			if(VA.acteur == actor) {
@@ -112,6 +123,10 @@ public class CScrutinAlternatif extends CScrutin {
 		}
 	}
 	
+	/**
+	 * Trie le vecteur de votes par score
+	 * @param vec vecteur de votes
+	 */
 	private void sortByScore(Vector<CVoteAlter> vec) {
 		for(int i=0 ; i < vec.size();i++) {
 			for(int j = 0; j< vec.size()-1;j++) {
@@ -124,6 +139,12 @@ public class CScrutinAlternatif extends CScrutin {
 		}
 	}
 	
+	/**
+	 * Enlève le candidat dernier à ce tour de l'urne globale et remet les scores à 0
+	 * @param vec résultat du tour
+	 * @param urne tous les résultats
+	 * @return l'acteur supprimé
+	 */
 	private CActeur RemoveLastCandidatAndReset(Vector<CVoteAlter> vec, Vector<Vector<CVoteAlter>> urne) {
 		int min = (int)vec.get(0).score;
 		int minIndex = 0;
@@ -154,7 +175,6 @@ public class CScrutinAlternatif extends CScrutin {
 		}
 		
 		return actLoose;
-		
 	}
 	
 	@Override

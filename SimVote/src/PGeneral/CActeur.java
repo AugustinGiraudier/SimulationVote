@@ -1,6 +1,7 @@
 package PGeneral;
 import java.util.Vector;
 
+import PExceptions.CAxeException;
 import PExceptions.CFatalException;
 import PExceptions.CUnknownParameterException;
 
@@ -10,9 +11,21 @@ import PExceptions.CUnknownParameterException;
  */
 public class CActeur {
 	
+	/**
+	 * Distance en dessous de laquelle des acteurs sont considérés proches
+	 */
 	public static double SeuilProximiteActeurs = -1;
+	/**
+	 * Distance au dessus de laquelle des acteurs sont considérés éloignés
+	 */
 	public static double SeuilDisatnceAbstention = -1;
+	/**
+	 * Nombre d'axes principaux dans le cas de l'algo de proximité à axes principaux
+	 */
 	public static int nbrAxesPrincipaux = -1;
+	/**
+	 * le pas de décalage lors de l'interaction entre deux acteurs
+	 */
 	public static double CoefInteraction = -1;
 	
 	private String nom;
@@ -24,9 +37,9 @@ public class CActeur {
 	public String getNom() {return nom;}
 
 	/**
-	 * @param _nom : nom de l'acteur
-	 * @param _vecAxes : vecteur des axes d'opinion de l'acteur
-	 * @throws Exception
+	 * @param _nom nom de l'acteur
+	 * @param _vecAxes vecteur des axes d'opinion de l'acteur
+	 * @throws CFatalException si données static non initialisées
 	 */
 	public CActeur(String _nom, Vector<CAxe> _vecAxes) throws CFatalException {
 		if(CActeur.SeuilProximiteActeurs == -1) {
@@ -47,10 +60,10 @@ public class CActeur {
 	
 	/**
 	 * Permet de recuperer la distance d'opinion entre deux acteurs
-	 * @param a : second acteur
-	 * @param algo : algorithme de proximité d'opinion à utiliser
+	 * @param a second acteur
+	 * @param algo algorithme de proximité d'opinion à utiliser
 	 * @return une valeur représentant la distance d'opinion
-	 * @throws Exception
+	 * @throws CUnknownParameterException en cas d'algo inconnu
 	 */
 	public double getDistance(CActeur a, EAlgoProximite algo) throws CUnknownParameterException {
 		switch(algo) {
@@ -61,7 +74,7 @@ public class CActeur {
 		case SOMME_DIFFERENCES_AXES_PRINCIPAUX:
 			return  moyenneDiffAxesPrincipaux(a);
 		default:
-			throw new CUnknownParameterException("Erreur : algorithme de proximité inconnu...");
+			throw new CUnknownParameterException("Erreur algorithme de proximité inconnu...");
 		}
 	}
 	
@@ -77,7 +90,7 @@ public class CActeur {
 	}
 			
 	/**
-	 * @param a : second acteur
+	 * @param a second acteur
 	 * @return la distance entre les vecteurs d'opinion des deux acteurs
 	 */
 	private double vectorDistance(CActeur a) {
@@ -97,7 +110,7 @@ public class CActeur {
 	/**
 	 * Récupère les axes principaux d'opinion du votant et fait la myenne des différences 
 	 * avec le second acteur sur ces axes.
-	 * @param a : second acteur
+	 * @param a second acteur
 	 * @return la moyenne des différences entre les axes principaux d'opinion
 	 */
 	private double moyenneDiffAxesPrincipaux(CActeur a) {
@@ -139,13 +152,12 @@ public class CActeur {
 	}
 	
 	/**
-	 * @param vecA : premier vecteur
-	 * @param vecB : second vecteur
+	 * @param vecA premier vecteur
+	 * @param vecB second vecteur
 	 * @return la moyenne des differences entre chaque terme des vecteurs
 	 */
 	private double moyenneDiff(Vector<CAxe> vecA, Vector<CAxe> vecB) {
 		Vector<Double> vecDiff = new Vector<Double>();
-		//TODO verifier les dims des vecteurs
 		for(CAxe axe1 : vecA) {
 			for(CAxe axe2 : vecB) {
 				if(axe1.memeNom(axe2)) {
@@ -160,6 +172,12 @@ public class CActeur {
 		return (sum/vecDiff.size());
 	}
 	
+	/**
+	 * Interaction avec un autre acteur (rapprochement si proches, éloignement si éloignés)
+	 * @param other second acteur
+	 * @param algoProximite algo de proximité à utiliser
+	 * @throws CFatalException si la distance ne peut se calculer
+	 */
 	public void interact(CActeur other, EAlgoProximite algoProximite) throws CFatalException {
 		
 		double distance;
@@ -180,10 +198,16 @@ public class CActeur {
 			// on les éloigne
 			this.eloigner(other);
 		}
-		// ni proches ni éloignés : on ne fait rien...
+		// ni proches ni éloignés on ne fait rien...
 	}
 	
-	public void rapprocherCandidat(CActeur candidat, EAlgoProximite algoProximite) {
+	/**
+	 * Rapproche l'acteur d'un candidat donné
+	 * @param candidat candidat de qui s'approcher
+	 * @param algoProximite algo de proximité à utiliser
+	 * @throws CFatalException si changement de valeur d'axe impossible
+	 */
+	public void rapprocherCandidat(CActeur candidat, EAlgoProximite algoProximite) throws CFatalException {
 		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
 					
 			// si trop proches, on break (rapprochement innutile)
@@ -193,18 +217,27 @@ public class CActeur {
 			int comp = this.vecAxes.get(i_axe).compareTo(candidat.vecAxes.get(i_axe));
 			
 			double val = this.vecAxes.get(i_axe).getValeur();
-			
-			if(comp < 0){
-				this.vecAxes.get(i_axe).setValeur(val - CActeur.CoefInteraction < 0 ? 0 : val - CActeur.CoefInteraction);
+			try {
+				if(comp < 0){
+					this.vecAxes.get(i_axe).setValeur(val - CActeur.CoefInteraction < 0 ? 0 : val - CActeur.CoefInteraction);
+				}
+				else {
+					this.vecAxes.get(i_axe).setValeur(val - CActeur.CoefInteraction > 1 ? 1 : val + CActeur.CoefInteraction);
+				}
 			}
-			else {
-				this.vecAxes.get(i_axe).setValeur(val - CActeur.CoefInteraction > 1 ? 1 : val + CActeur.CoefInteraction);
+			catch(CAxeException e) {
+				throw new CFatalException(e.getMessage());
 			}
 			
 		}
 	}
 	
-	private void rapprocher(CActeur other) {
+	/**
+	 * Rapproche deux acteurs
+	 * @param other second acteur
+	 * @throws CFatalException si changement de valeur d'axe impossible
+	 */
+	private void rapprocher(CActeur other) throws CFatalException {
 		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
 			
 			// si trop proches, on break (rapprochement innutile)
@@ -225,12 +258,22 @@ public class CActeur {
 			}
 			double valA = A.vecAxes.get(i_axe).getValeur();
 			double valB = B.vecAxes.get(i_axe).getValeur();
-			A.vecAxes.get(i_axe).setValeur(valA - CActeur.CoefInteraction < 0 ? 0 : valA - CActeur.CoefInteraction);
-			B.vecAxes.get(i_axe).setValeur(valB + CActeur.CoefInteraction > 1 ? 1 : valB + CActeur.CoefInteraction);
+			try {
+				A.vecAxes.get(i_axe).setValeur(valA - CActeur.CoefInteraction < 0 ? 0 : valA - CActeur.CoefInteraction);
+				B.vecAxes.get(i_axe).setValeur(valB + CActeur.CoefInteraction > 1 ? 1 : valB + CActeur.CoefInteraction);
+			}
+			catch(CAxeException e) {
+				throw new CFatalException(e.getMessage());
+			}
 		}
 	}
 	
-	private void eloigner(CActeur other) {
+	/**
+	 * Eloigne deux acteurs
+	 * @param other second acteur
+	 * @throws CFatalException si changement de valeur d'axe impossible
+	 */
+	private void eloigner(CActeur other) throws CFatalException {
 		for(int i_axe = 0; i_axe<this.vecAxes.size(); i_axe++) {
 			
 			// on les compare :
@@ -247,8 +290,12 @@ public class CActeur {
 			}
 			double valA = A.vecAxes.get(i_axe).getValeur();
 			double valB = B.vecAxes.get(i_axe).getValeur();
-			A.vecAxes.get(i_axe).setValeur(valA + CActeur.CoefInteraction > 1 ? 1 : valA + CActeur.CoefInteraction);
-			B.vecAxes.get(i_axe).setValeur(valB - CActeur.CoefInteraction < 0 ? 0 : valB - CActeur.CoefInteraction);
+			try {
+				A.vecAxes.get(i_axe).setValeur(valA + CActeur.CoefInteraction > 1 ? 1 : valA + CActeur.CoefInteraction);
+				B.vecAxes.get(i_axe).setValeur(valB - CActeur.CoefInteraction < 0 ? 0 : valB - CActeur.CoefInteraction);
+			} catch(CAxeException e) {
+				throw new CFatalException(e.getMessage());
+			}
 		}
 	}
 	

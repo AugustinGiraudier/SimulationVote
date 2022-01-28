@@ -13,9 +13,8 @@ import PGeneral.EAlgoProximite;
 public class CScrutinMajoritaire2Tours extends CScrutin {
 
 	/**
-	 * @param algo : algorithme de proximité à utiliser
-	 * @param vecCandidats : vecteur d'acteurs contenant les candidats
-	 * @param vecAll : vecteur d'acteurs contenant les electeurs
+	 * @param vecCandidats vecteur d'acteurs contenant les candidats
+	 * @param vecAll vecteur d'acteurs contenant les electeurs
 	 */
 	public CScrutinMajoritaire2Tours(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll) {
 		super(vecCandidats, vecAll);

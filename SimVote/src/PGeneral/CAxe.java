@@ -14,14 +14,11 @@ public class CAxe implements Comparable<CAxe> {
 	private double valeur; 
 	
 	/**
-	 * @param _nom : nom de l'axe
-	 * @param _valeur : valeur de l'axe
-	 * @throws Exception
+	 * @param _nom nom de l'axe
+	 * @param _valeur valeur de l'axe
+	 * @throws CAxeException si la valeur n'est pas dans [0;1]
 	 */
 	public CAxe(String _nom, double _valeur) throws CAxeException {
-		//if(Axe.SeuilProximiteOpinion == -1) {
-		//	throw new Exception("Please Set The static variable Axe.SeuilProximiteOpinion before instantiate it.");
-		//}
 		this.nom = _nom;
 		if(_valeur < 0 || _valeur > 1) {
 			throw new CAxeException("An Axis has been created with a value out of [0,1]");
@@ -34,28 +31,39 @@ public class CAxe implements Comparable<CAxe> {
 	 */
 	public double getValeur() {return valeur;}
 
-	public void setValeur(double value) {this.valeur = value;}
+	/**
+	 * Change la valeur de l'axe
+	 * @param _valeur nouvelle valeur
+	 * @throws CAxeException si la valeur n'est pas dans [0;1]
+	 */
+	public void setValeur(double _valeur) throws CAxeException {
+		if(_valeur < 0 || _valeur > 1) {
+			throw new CAxeException("An Axis has been created with a value out of [0,1]");
+		}
+		this.valeur = _valeur;
+	}
+	
 	/**
 	 * @return le nom associé à l'axe
 	 */
 	private String getNom() {return nom;}
 	
 	/**
-	 * @param a : second axe
+	 * @param a second axe
 	 * @return la distance entre deux axes (valeur absolue de la différence)
 	 */
 	public double getDistance(CAxe a) {
 		return Math.abs(this.valeur - a.getValeur());
 	}
 	/**
-	 * @param a : second axe
+	 * @param a second axe
 	 * @return 'true' si les deux axes ont le même nom
 	 */
 	public boolean memeNom(CAxe a) {
 		return nom == a.getNom();
 	}
 	/**
-	 * @param a : second axe
+	 * @param a second axe
 	 * @return moyenne des valeurs des deux axes
 	 */
 	public double moyenne(CAxe a) {
@@ -71,7 +79,6 @@ public class CAxe implements Comparable<CAxe> {
 			strBars += " ";
 		
 		DecimalFormat df = new DecimalFormat("0.00");
-		//return "---\nAxe: '" + this.nom + "' : " + this.valeur + "\n";
 		return strBars + " (" + df.format(this.valeur) + ") --> " + this.nom + "\n";
 	}
 
