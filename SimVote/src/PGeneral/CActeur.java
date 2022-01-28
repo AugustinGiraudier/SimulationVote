@@ -245,11 +245,11 @@ public class CActeur {
 	
 	@Override
 	public String toString() {
-		String out =  "*******************\nActeur: " + this.nom + "\nAxes :\n";
+		String out =  "- - - - - - - - - - - - -\nActeur: " + this.nom + "\n\n";
 		for(CAxe a : this.vecAxes) {
 			out += a.toString();
 		}
-		return out + "*******************";
+		return out;
 	}
 	
 	@Override

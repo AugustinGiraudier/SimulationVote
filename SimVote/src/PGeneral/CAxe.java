@@ -1,4 +1,7 @@
 package PGeneral;
+
+import java.text.DecimalFormat;
+
 /**
  * Classe gérant un axe d'opinion
  * @author Augustin Giraudier et Arthur Secher Cabot
@@ -59,7 +62,15 @@ public class CAxe implements Comparable<CAxe> {
 	
 	@Override
 	public String toString() {
-		return "---\nAxe: '" + this.nom + "' " + this.valeur + "\n---\n";
+		String strBars = "";
+		for(int i_bar=0; i_bar < (int)(this.valeur*10+0.5); i_bar++)
+			strBars += '|';
+		while(strBars.length() < 10)
+			strBars += " ";
+		
+		DecimalFormat df = new DecimalFormat("0.00");
+		//return "---\nAxe: '" + this.nom + "' : " + this.valeur + "\n";
+		return strBars + " (" + df.format(this.valeur) + ") --> " + this.nom + "\n";
 	}
 
 	@Override

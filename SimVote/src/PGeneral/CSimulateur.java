@@ -38,10 +38,10 @@ public class CSimulateur {
 	
 	public CSimulateur(
 			EAlgoProximite algo,
-			EScrutinType scrutin, 
+			EScrutinType scrutin,
 			String ConfigFilePath,
-			Vector<CActeur> vecCandidats, 
-			Vector<CActeur> vecElecteurs, 
+			Vector<CActeur> vecCandidats,
+			Vector<CActeur> vecElecteurs,
 			Vector<CActeur> vecAll
 			) throws Exception {
 		
@@ -178,6 +178,10 @@ public class CSimulateur {
 		}
 	}
 	
+	public void changeAlgo(EAlgoProximite algo){
+		this.algo = algo;
+	}
+	
 	public void changeScrutin(EScrutinType scrutin) throws Exception {
 		switch(scrutin) {
 		case ALTERNATIF:
@@ -211,7 +215,20 @@ public class CSimulateur {
 		System.out.println("---");
 	}
 	
-	private void DisplayResults(Vector<CResultScrutin> VecResult) {
+	public void DisplayResults(Vector<CResultScrutin> VecResult) {
+		// Tris des résultats :
+		boolean changeHappent = true;
+		while(changeHappent) {
+			changeHappent = false;
+			for(int j=0 ; j<VecResult.size()-1; j++)
+				if(VecResult.get(j).getIscore() < VecResult.get(j+1).getIscore()) {
+					changeHappent = true;
+					CResultScrutin temp = VecResult.get(j);
+					VecResult.set(j, VecResult.get(j+1));
+					VecResult.set(j+1, temp);
+				}
+		}
+		
 		for (CResultScrutin rs : VecResult) {
 		    System.out.println(rs);
 		}
@@ -254,11 +271,6 @@ public class CSimulateur {
 		
 		Vector<CResultScrutin> VecResult = sondage.simuler(this.algo);
 		
-//		System.out.println("--- Results Sondage sur " + Integer.toString(popPercentage) 
-//			+ "% de la population (soit " + Integer.toString(nbSondes) + " personnes) ---");
-//		DisplayResults(VecResult);
-//		System.out.println("---");
-		
 		return VecResult;
 	}
 	
@@ -285,6 +297,24 @@ public class CSimulateur {
 			// Rapprochement avec le candidat ciblé : 
 			electeur.rapprocherCandidat(sondageResults.get(index).getActeur(), algo);
 		}
+	}
+	
+	public void PrintInfos() {
+		System.out.println("\n----------------- Infos Scrutin -----------------");
+		System.out.println("Type de scrutin : " + this.typeScrutin.toString());
+		System.out.println("Type d'algo de proximité : " + this.algo.toString());
+		System.out.println("Nombre de candidats : " + Integer.toString(vecCandidats.size()));
+		System.out.println("Nombre d'électeurs : " + Integer.toString(vecElecteurs.size()));
+		System.out.println("Nombre total d'acteurs : " + Integer.toString(vecAll.size()));
+		System.out.println("-------------------------------------------------\n");
+	}
+	
+	public void PrintCandidates() {
+		System.out.println("\n----------------- Infos Candidats -----------------");
+		for(CActeur cand : this.vecCandidats) {
+			System.out.println(cand);
+		}
+		System.out.println("---------------------------------------------------\n");
 	}
 	
 }
