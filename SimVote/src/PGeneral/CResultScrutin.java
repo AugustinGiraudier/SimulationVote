@@ -8,27 +8,27 @@ package PGeneral;
 public class CResultScrutin {
 
 	private CActeur acteur;
-	private double Fscore;
+	private double dScore;
 	private String strScore;
 	
 	/**
 	 * Crée un résultat avec un acteur et son score
 	 * @param _acteur acteur
-	 * @param _Fscore score
+	 * @param _dScore score
 	 */
-	public CResultScrutin(CActeur _acteur, double _Fscore) {
-		this(_acteur, _Fscore, null);
+	public CResultScrutin(CActeur _acteur, double _dScore) {
+		this(_acteur, _dScore, null);
 	}
 	
 	/**
 	 * Crée un résultat avec un acteur, son score et une string à afficher
 	 * @param _acteur acteur
-	 * @param _Fscore score
+	 * @param _dScore score
 	 * @param _strScore message à afficher à la place du score
 	 */
-	public CResultScrutin(CActeur _acteur, double _Fscore, String _strScore) {
+	public CResultScrutin(CActeur _acteur, double _dScore, String _strScore) {
 		this.acteur = _acteur;
-		this.Fscore = _Fscore;
+		this.dScore = _dScore;
 		this.strScore = _strScore;
 	}
 	
@@ -44,7 +44,7 @@ public class CResultScrutin {
 	 * @return le score numérique
 	 */
 	public double getIscore() {
-		return Fscore;
+		return dScore;
 	}
 	/**
 	 * Récupérer son score en caractères
@@ -59,7 +59,7 @@ public class CResultScrutin {
 		String out = this.acteur.getNom() + " : ";
 		
 		if(this.strScore == null) 
-			out += Double.toString(this.Fscore);
+			out += Double.toString(this.dScore);
 		else
 			out += this.strScore;
 		
