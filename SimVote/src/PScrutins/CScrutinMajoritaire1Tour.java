@@ -1,6 +1,8 @@
 package PScrutins;
 import java.util.Vector;
 
+import PExceptions.CFatalException;
+import PExceptions.CUnknownParameterException;
 import PGeneral.CActeur;
 import PGeneral.CResultScrutin;
 import PGeneral.EAlgoProximite;
@@ -21,10 +23,15 @@ public class CScrutinMajoritaire1Tour extends CScrutin{
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws CFatalException {
 		
 		// Un scrutin majoritaire un tour revient à un scrutin borda avec une liste de 1 candidat : 
-		CScrutinBorda sb = new CScrutinBorda(vecCandidats, vecAll, 1);
+		CScrutinBorda sb;
+		try {
+			sb = new CScrutinBorda(vecCandidats, vecAll, 1);
+		} catch (CUnknownParameterException e) {
+			throw new CFatalException("You cannot simulate a ballot without any candidate...");
+		}
 		return sb.simuler(algoProximite);
 		
 	}

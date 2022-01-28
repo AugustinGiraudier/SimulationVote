@@ -1,6 +1,7 @@
 package PScrutins;
 import java.util.Vector;
 
+import PExceptions.CUnknownParameterException;
 import PGeneral.CActeur;
 import PGeneral.CResultScrutin;
 import PGeneral.EAlgoProximite;
@@ -20,11 +21,11 @@ public class CScrutinBorda extends CScrutin {
 	 * @param vecAll : vecteur d'acteurs contenant les electeurs
 	 * @throws Exception 
 	 */
-	public CScrutinBorda(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll, int coefBorda) throws Exception {
+	public CScrutinBorda(Vector<CActeur> vecCandidats, Vector<CActeur> vecAll, int coefBorda) throws CUnknownParameterException {
 		super(vecCandidats, vecAll);
 		
 		if(coefBorda > vecCandidats.size())
-			throw new Exception("Cannot instantiate Borda Ballot with coefBorda > nb electeors");
+			throw new CUnknownParameterException("Cannot instantiate Borda Ballot with coefBorda > nb electeors");
 		
 		this.IcoefBorda = coefBorda;
 	}
@@ -42,7 +43,7 @@ public class CScrutinBorda extends CScrutin {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite){
 		
 		Vector<Vector<CVoteBorda>> urne = new Vector<Vector<CVoteBorda>>();
 		

@@ -1,6 +1,7 @@
 package PScrutins;
 import java.util.Vector;
 
+import PExceptions.CFatalException;
 import PGeneral.CActeur;
 import PGeneral.CResultScrutin;
 import PGeneral.EAlgoProximite;
@@ -21,7 +22,7 @@ public class CScrutinMajoritaire2Tours extends CScrutin {
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws CFatalException {
 		
 		// On crée un scrutin majoritaire à 1 tour pour simuler le premier tour :
 		CScrutinMajoritaire1Tour tour1 = new CScrutinMajoritaire1Tour(this.vecCandidats, this.vecAll);

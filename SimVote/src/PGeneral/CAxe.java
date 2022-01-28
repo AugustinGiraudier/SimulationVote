@@ -2,6 +2,8 @@ package PGeneral;
 
 import java.text.DecimalFormat;
 
+import PExceptions.CAxeException;
+
 /**
  * Classe gérant un axe d'opinion
  * @author Augustin Giraudier et Arthur Secher Cabot
@@ -16,13 +18,13 @@ public class CAxe implements Comparable<CAxe> {
 	 * @param _valeur : valeur de l'axe
 	 * @throws Exception
 	 */
-	public CAxe(String _nom, double _valeur) throws Exception {
+	public CAxe(String _nom, double _valeur) throws CAxeException {
 		//if(Axe.SeuilProximiteOpinion == -1) {
 		//	throw new Exception("Please Set The static variable Axe.SeuilProximiteOpinion before instantiate it.");
 		//}
 		this.nom = _nom;
 		if(_valeur < 0 || _valeur > 1) {
-			throw new Exception("An Axis has been created with a value out of [0,1]");
+			throw new CAxeException("An Axis has been created with a value out of [0,1]");
 		}
 		this.valeur = _valeur;
 	};

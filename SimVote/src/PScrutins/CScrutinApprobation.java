@@ -1,6 +1,8 @@
 package PScrutins;
 import java.util.Vector;
 
+import PExceptions.CFatalException;
+import PExceptions.CUnknownParameterException;
 import PGeneral.CActeur;
 import PGeneral.CResultScrutin;
 import PGeneral.EAlgoProximite;
@@ -28,7 +30,7 @@ public class CScrutinApprobation extends CScrutin{
 	}
 
 	@Override
-	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception {
+	public Vector<CResultScrutin> simuler(EAlgoProximite algoProximite)throws CFatalException{
 		
 		this.nbAbstention = 0;
 		
@@ -38,9 +40,14 @@ public class CScrutinApprobation extends CScrutin{
 		for(CActeur electeur : this.vecAll) {
 			int nbAppro = 0;
 			for(CVoteAppro CA : vecVote) {
-				if(electeur.getDistance(CA.acteur, algoProximite) < CActeur.SeuilProximiteActeurs) {
-					CA.nbrApprobation++;
-					nbAppro++;
+				try {
+					if(electeur.getDistance(CA.acteur, algoProximite) < CActeur.SeuilProximiteActeurs) {
+						CA.nbrApprobation++;
+						nbAppro++;
+					}
+				}
+				catch(CUnknownParameterException e) {
+					throw new CFatalException(e.getMessage());
 				}
 			}
 			if(nbAppro == 0)

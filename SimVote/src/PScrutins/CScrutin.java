@@ -2,6 +2,7 @@ package PScrutins;
 
 import java.util.Vector;
 
+import PExceptions.CFatalException;
 import PGeneral.CActeur;
 import PGeneral.CResultScrutin;
 import PGeneral.EAlgoProximite;
@@ -29,7 +30,7 @@ public abstract class CScrutin {
 	 * @return le résultat du Scrutin
 	 * @throws Exception 
 	 */
-	public abstract Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws Exception;
+	public abstract Vector<CResultScrutin> simuler(EAlgoProximite algoProximite) throws CFatalException;
 	
 	public double ComuteAbstention(Vector<CResultScrutin> res){
 		double sum = 0;

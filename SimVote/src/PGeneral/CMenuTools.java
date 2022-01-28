@@ -2,6 +2,8 @@ package PGeneral;
 
 import java.util.Scanner;
 
+import PExceptions.CFatalException;
+
 public class CMenuTools {
 
 	private CMenuTools() {};
@@ -24,12 +26,17 @@ public class CMenuTools {
 		System.out.println("+- " + strSpaces + Title + strSpaces + (Title.length()%2 == 0 ? "" : " ") + " -+");
 		System.out.println("+----------------------------------------+");
 	}
-	private static String getUserChoice() {
+	private static String getUserChoice() throws CFatalException {
 		if(CMenuTools.SC == null)
 			CMenuTools.SC = new Scanner(System.in);
 		
 		System.out.println("Votre Choix : ");
-		return SC.next();
+		try {
+			return SC.next();
+		}
+		catch(Exception e) {
+			throw new CFatalException("Invalid user input");
+		}
 	}
 	public static void Pause() {
 		System.out.println("Appuyez sur Entrer pour continuer...");
@@ -37,7 +44,7 @@ public class CMenuTools {
 		SC.nextLine();
 	}
 	
-	public static EScrutinType PrintChoixScrutin() {
+	public static EScrutinType PrintChoixScrutin() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Configurations");
@@ -65,7 +72,7 @@ public class CMenuTools {
 		
 	}
 	
-	public static EAlgoProximite PrintChoixAlgo() {
+	public static EAlgoProximite PrintChoixAlgo() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Configurations");
@@ -91,7 +98,7 @@ public class CMenuTools {
 		ACTEURS_FICHIER,
 		ACTEURS_ALEATOIRES
 	}
-	public static EChoixActeurs PrintChoixActeurs() {
+	public static EChoixActeurs PrintChoixActeurs() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Configurations");
@@ -119,7 +126,7 @@ public class CMenuTools {
 		}
 	}
 	
-	public static CActeursAlea BrancheActeursAleatoires() {
+	public static CActeursAlea BrancheActeursAleatoires() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Premieres Configurations");
@@ -128,12 +135,22 @@ public class CMenuTools {
 			
 			while(nbCandidats < 1) {
 				System.out.println("\nCombiens de candidat(s) générer ?");
-				nbCandidats = Integer.parseInt(getUserChoice());
+				try {
+					nbCandidats = Integer.parseInt(getUserChoice());
+				}
+				catch(NumberFormatException e) {
+					continue;
+				}
 			}
 			
 			while(nbElecteurs < 1) {
 				System.out.println("\nCombiens d'Electeurs générer ?");
-				nbElecteurs = Integer.parseInt(getUserChoice());
+				try {
+					nbElecteurs = Integer.parseInt(getUserChoice());
+				}
+				catch(NumberFormatException e) {
+					continue;
+				}
 			}
 			
 			return new CActeursAlea(nbCandidats, nbElecteurs);
@@ -151,7 +168,7 @@ public class CMenuTools {
 		QUIT
 	}
 	
-	public static EMainActions PrintMainMenu() {
+	public static EMainActions PrintMainMenu() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Menu Principal");
@@ -187,7 +204,7 @@ public class CMenuTools {
 		}
 	}
 	
-	public static boolean BrancheInfos() {
+	public static boolean BrancheInfos() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Choix Infos");
@@ -205,18 +222,24 @@ public class CMenuTools {
 		}
 	}
 	
-	public static int BrancheSondage() {
+	public static int BrancheSondage() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Choix sondage");
 			System.out.println("\nQuel pourcentage de la population voulez vous sonder ?\n");
-			int percent = Integer.parseInt(getUserChoice());
+			int percent;
+			try {
+				percent = Integer.parseInt(getUserChoice());
+			}
+			catch(NumberFormatException e) {
+				continue;
+			}
 			if(percent < 0 || percent > 100)
 				continue;
 			return percent;
 		}
 	}
-	public static boolean BrancheSondageInteractions() {
+	public static boolean BrancheSondageInteractions() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Choix sondage");
@@ -234,12 +257,18 @@ public class CMenuTools {
 		}
 	}
 	
-	public static int BrancheInteractions() {
+	public static int BrancheInteractions() throws CFatalException {
 		while(true) {
 			PrintHeader();
 			PrintTitle("Choix nombre interactions");
 			System.out.println("\nCombien d'interactions voulez vous générer ?\n");
-			int nbrInter = Integer.parseInt(getUserChoice());
+			int nbrInter;
+			try {
+				nbrInter = Integer.parseInt(getUserChoice());
+			}
+			catch(NumberFormatException e) {
+				continue;
+			}
 			if(nbrInter < 0)
 				continue;
 			return nbrInter;

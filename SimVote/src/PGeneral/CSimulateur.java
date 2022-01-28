@@ -10,6 +10,9 @@ import java.util.Vector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import PExceptions.CAxeException;
+import PExceptions.CFatalException;
+import PExceptions.CUnknownParameterException;
 import PScrutins.CScrutin;
 import PScrutins.CScrutinAlternatif;
 import PScrutins.CScrutinApprobation;
@@ -63,7 +66,7 @@ public class CSimulateur {
 			String ConfigFilePath,
 			int nbrCandidats,
 			int nbrElecteurs
-			) throws Exception {
+			)throws CFatalException{
 		
 		this.algo = algo;
 		this.typeScrutin = scrutin;
@@ -106,7 +109,7 @@ public class CSimulateur {
 			EScrutinType scrutin, 
 			String ConfigFilePath, 
 			String ActorsFilePath
-			) throws Exception {
+			) throws CFatalException {
 		
 		this.vecCandidats = new Vector<>();
 		this.vecElecteurs = new Vector<>();
@@ -122,10 +125,15 @@ public class CSimulateur {
 
 	}
 	
-	private CActeur createRandomActor(String name, Random RD) throws Exception {
+	private CActeur createRandomActor(String name, Random RD)throws CFatalException{
 		Vector<CAxe> vecAxes = new Vector<>();
 		for(String strAxe : this.vecStrAxes) {
-			vecAxes.add(new CAxe(strAxe, RD.nextDouble()));
+			try {
+				vecAxes.add(new CAxe(strAxe, RD.nextDouble()));
+			}
+			catch(CAxeException e) {
+				throw new CFatalException("Random module doesn't seem to work properly");
+			}
 		}
 		return new CActeur(name, vecAxes);
 	}
@@ -182,7 +190,7 @@ public class CSimulateur {
 		this.algo = algo;
 	}
 	
-	public void changeScrutin(EScrutinType scrutin) throws Exception {
+	public void changeScrutin(EScrutinType scrutin) throws CFatalException {
 		switch(scrutin) {
 		case ALTERNATIF:
 			this.scrutin = new CScrutinAlternatif(this.vecCandidats, this.vecAll);
@@ -191,7 +199,19 @@ public class CSimulateur {
 			this.scrutin = new CScrutinApprobation(this.vecCandidats, this.vecAll);
 			break;
 		case BORDA:
-			this.scrutin = new CScrutinBorda(this.vecCandidats, this.vecAll, CSimulateur.CoefBorda);
+			try {
+				this.scrutin = new CScrutinBorda(this.vecCandidats, this.vecAll, CSimulateur.CoefBorda);
+			}
+			catch(CUnknownParameterException e) {
+				System.out.println(e.getMessage());
+				System.out.println("New try with 1 as Borda coef...");
+				try {
+					this.scrutin = new CScrutinBorda(this.vecCandidats, this.vecAll,1);
+				}
+				catch(CUnknownParameterException e2) {
+					throw new CFatalException("You must have at least 1 canididate...");
+				}
+			}
 			break;
 		case MAJORITAIRE_1_TOUR:
 			this.scrutin = new CScrutinMajoritaire1Tour(this.vecCandidats, this.vecAll);
@@ -205,9 +225,9 @@ public class CSimulateur {
 	
 	/**
 	 * Lance le scrutin enregistré et affiche les résultats
-	 * @throws Exception 
+	 * @throws CFatalException
 	 */
-	public void Simuler() throws Exception {
+	public void Simuler() throws CFatalException{
 		Vector<CResultScrutin> VecResult = this.scrutin.simuler(this.algo);
 		System.out.println("--- Results Scrutin " + this.typeScrutin.name() + " ---");
 		DisplayResults(VecResult);
@@ -234,7 +254,7 @@ public class CSimulateur {
 		}
 	}
 	
-	public void interact(int nbInteractions) throws Exception {
+	public void interact(int nbInteractions) throws CFatalException {
 		
 		Random rand = new Random(); 
 		
@@ -247,10 +267,10 @@ public class CSimulateur {
 		}
 	}
 	
-	public Vector<CResultScrutin> sonder(int popPercentage) throws Exception {
+	public Vector<CResultScrutin> sonder(int popPercentage) throws CFatalException{
 		
 		if(popPercentage < 0 || popPercentage > 100) {
-			throw new Exception("Percentage out of [0;100]");
+			throw new CFatalException("Percentage out of [0;100]");
 		}
 		
 		// tirage d'une séquence aléatoire pour le sondage :
@@ -274,7 +294,7 @@ public class CSimulateur {
 		return VecResult;
 	}
 	
-	public void interactWithSondage(Vector<CResultScrutin> sondageResults) throws Exception {
+	public void interactWithSondage(Vector<CResultScrutin> sondageResults) throws CFatalException {
 		
 		// pour chaque electeur :
 		for(CActeur electeur : this.vecElecteurs) {
@@ -286,7 +306,12 @@ public class CSimulateur {
 				CActeur candidat = sondageResults.get(i_acteur).getActeur();
 				double score = sondageResults.get(i_acteur).getIscore();
 				
-				double utilite = (1/electeur.getDistance(candidat, this.algo)) * score;
+				double utilite;
+				try {
+					utilite = (1/electeur.getDistance(candidat, this.algo)) * score;
+				} catch (CUnknownParameterException e) {
+					throw new CFatalException(e.getMessage());
+				}
 				
 				if(utilite > utiliteMax) {
 					utiliteMax = utilite;

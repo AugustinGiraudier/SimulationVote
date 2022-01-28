@@ -1,6 +1,9 @@
 package PGeneral;
 import java.util.Vector;
 
+import PExceptions.CFatalException;
+import PExceptions.CUnknownParameterException;
+
 /**
  * classe représentant un acteur (candidat ou electeur)
  * @author Augustin Giraudier et Arthur Secher Cabot
@@ -25,18 +28,18 @@ public class CActeur {
 	 * @param _vecAxes : vecteur des axes d'opinion de l'acteur
 	 * @throws Exception
 	 */
-	public CActeur(String _nom, Vector<CAxe> _vecAxes) throws Exception {
+	public CActeur(String _nom, Vector<CAxe> _vecAxes) throws CFatalException {
 		if(CActeur.SeuilProximiteActeurs == -1) {
-			throw new Exception("Please Set The static variable CActeur.SeuilProximiteActeurs before instantiate it.");
+			throw new CFatalException("Please Set The static variable CActeur.SeuilProximiteActeurs before instantiate it.");
 		}
 		else if(CActeur.nbrAxesPrincipaux == -1) {
-			throw new Exception("Please Set The static variable CActeur.nbrAxesPrincipaux before instantiate it.");
+			throw new CFatalException("Please Set The static variable CActeur.nbrAxesPrincipaux before instantiate it.");
 		}
 		else if(CActeur.SeuilDisatnceAbstention == -1) {
-			throw new Exception("Please Set The static variable CActeur.SeuilDisatnceAbstention before instantiate it.");
+			throw new CFatalException("Please Set The static variable CActeur.SeuilDisatnceAbstention before instantiate it.");
 		}
 		else if(CActeur.CoefInteraction == -1) {
-			throw new Exception("Please Set The static variable CActeur.CoefInteraction before instantiate it.");
+			throw new CFatalException("Please Set The static variable CActeur.CoefInteraction before instantiate it.");
 		}
 		this.nom = _nom;
 		this.vecAxes = _vecAxes;
@@ -49,7 +52,7 @@ public class CActeur {
 	 * @return une valeur représentant la distance d'opinion
 	 * @throws Exception
 	 */
-	public double getDistance(CActeur a, EAlgoProximite algo) throws Exception {
+	public double getDistance(CActeur a, EAlgoProximite algo) throws CUnknownParameterException {
 		switch(algo) {
 		case DISTANCE_VECTEUR:
 			return  vectorDistance(a);
@@ -58,7 +61,7 @@ public class CActeur {
 		case SOMME_DIFFERENCES_AXES_PRINCIPAUX:
 			return  moyenneDiffAxesPrincipaux(a);
 		default:
-			throw new Exception("Erreur : algorithme de proximité inconnu...");
+			throw new CUnknownParameterException("Erreur : algorithme de proximité inconnu...");
 		}
 	}
 	
@@ -157,8 +160,14 @@ public class CActeur {
 		return (sum/vecDiff.size());
 	}
 	
-	public void interact(CActeur other, EAlgoProximite algoProximite) throws Exception {
-		double distance = this.getDistance(other, algoProximite);
+	public void interact(CActeur other, EAlgoProximite algoProximite) throws CFatalException {
+		
+		double distance;
+		try {
+			distance = this.getDistance(other, algoProximite);
+		} catch (CUnknownParameterException e) {
+			throw new CFatalException(e.getMessage());
+		}
 		
 		//opinions proches :
 		if(distance < CActeur.SeuilProximiteActeurs) {
