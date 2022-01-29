@@ -1,28 +1,28 @@
 {
     "Candidats" : [
         {
-            "id" : "Jadot",
+            "id" : "Janot",
             "Ecologie" : 1,
             "Capitalisme" : 0,
             "PouvoirAchat" : 0.5,
             "Immigration" : 0
         },
         {
-            "id" : "Fillon",
+            "id" : "Féllon",
             "Ecologie" : 0.1,
             "Capitalisme" : 1,
             "PouvoirAchat" : 0.3,
             "Immigration" : 0.6
         },
         {
-            "id" : "Zemmour",
+            "id" : "Zemmouz",
             "Ecologie" : 0,
             "Capitalisme" : 0.8,
             "PouvoirAchat" : 0.5,
             "Immigration" : 1
         },
         {
-            "id" : "Macron",
+            "id" : "Macaron",
             "Ecologie" : 0.2,
             "Capitalisme" : 0.9,
             "PouvoirAchat" : 0.4,
